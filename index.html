@@ -200,6 +200,40 @@
     .date-col{display:flex;flex-direction:column;gap:4px}
     .date-sep-mid{font-size:13px;color:var(--kit-light);padding-bottom:9px;flex-shrink:0}
 
+    /* ── Version switch ── */
+    .ver-switch{display:flex;background:var(--cape-light);border-radius:var(--r-md);padding:3px;gap:2px}
+    .ver-switch button{flex:1;padding:7px 10px;font-size:13px;font-weight:700;border-radius:6px;color:var(--kit-light);font-family:var(--font);transition:all .15s}
+    .ver-switch button.active{background:var(--arctic-primary);color:#fff;box-shadow:var(--shadow-btn)}
+    .ver-badge{display:inline-flex;align-items:center;gap:4px;background:var(--arctic-lightest);color:var(--arctic-primary);font-size:11px;font-weight:800;padding:2px 8px;border-radius:10px;letter-spacing:.5px;text-transform:uppercase;margin-left:8px}
+
+    /* ── DS component map tags (V2 inspector mode) ── */
+    .ds-tag{display:inline-flex;align-items:center;gap:3px;background:#FDF4E6;color:#B45309;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;letter-spacing:.2px;margin-left:6px;font-family:'Monaco','Menlo',monospace;border:1px solid #F5D9A8;cursor:help;vertical-align:middle;line-height:1.4}
+    .ds-tag:hover{background:#FBE9C8}
+    .ds-tag-card{display:inline-flex;align-items:center;gap:3px;background:#EEF7FB;color:#0079C4;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;letter-spacing:.2px;margin-left:8px;font-family:'Monaco','Menlo',monospace;border:1px solid #BFE0EE;cursor:help;line-height:1.4}
+    .ds-tag-card:hover{background:#D9EEF6}
+    .ds-tag-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+
+    /* ── V2 segmented tabs (used in ClassDrawer V2) ── */
+    .seg-tabs-v2{display:inline-flex;background:var(--pale-primary);border:1.5px solid var(--cape-dark);border-radius:var(--r-md);padding:2px;gap:0;margin-bottom:16px}
+    .seg-tab-v2{padding:7px 14px;font-size:13px;font-weight:700;color:var(--kit-primary);font-family:var(--font);border-radius:var(--r-sm);transition:all .15s;border:none;background:none}
+    .seg-tab-v2.active{background:var(--arctic-primary);color:#fff}
+
+    /* ── V2 segmented control (small, for Enabled/Disabled etc.) ── */
+    .seg-pill{display:inline-flex;background:var(--cape-light);border-radius:var(--r-md);padding:2px;gap:0}
+    .seg-pill button{padding:5px 14px;font-size:12px;font-weight:700;color:var(--kit-light);font-family:var(--font);border-radius:6px;transition:all .12s;border:none;background:none}
+    .seg-pill button.on{background:var(--arctic-primary);color:#fff}
+
+    /* ── V2 booking option rows ── */
+    .bk-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .bk-row-lbl{font-size:13px;font-weight:700;flex:1}
+    .bk-amt{width:130px;display:flex;align-items:center;gap:4px;border:1.5px solid var(--cape-dark);border-radius:var(--r-md);padding:5px 10px;background:var(--pale-primary)}
+    .bk-amt input{border:none;outline:none;width:100%;font-size:14px;font-family:var(--font)}
+    .bk-amt-prefix{color:var(--kit-lighter);font-size:14px;font-weight:700}
+    .bk-toggle-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+    .bk-toggle-body{flex:1}
+    .bk-toggle-title{font-size:14px;font-weight:700;color:var(--kit-primary)}
+    .bk-toggle-desc{font-size:12px;color:var(--kit-light);margin-top:2px}
+
     /* ── Multi-select ── */
     .msel-wrap{position:relative}
     .msel-input{display:flex;align-items:center;min-height:36px;background:var(--pale-primary);border:1.5px solid var(--cape-dark);border-radius:var(--r-lg);padding:5px 10px;cursor:pointer;gap:6px;flex-wrap:wrap}
@@ -731,6 +765,13 @@ function Sel({ value, onChange, opts, placeholder, disabled }) {
     </div>
   );
 }
+// ─── DSTag — design system mapping annotation (V2 inspector) ─────
+function DSTag({ show, name, path, kind }) {
+  if (!show) return null;
+  const cls = kind === 'card' ? 'ds-tag-card' : 'ds-tag';
+  return <span className={cls} title={path ? `${name} — ${path}` : name}>{name}</span>;
+}
+
 // ─── MultiSel — multi-select with chips ──────────────────────────
 function MultiSel({ value, onChange, opts, placeholder }) {
   const [open, setOpen] = useState(false);
@@ -1038,7 +1079,9 @@ function ColourSel({ value, onChange }) {
 }
 
 // ─── Class Drawer (Create + Edit) ────────────────────────────────
-function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templates }) {
+function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templates, version='v1', showDsMap=false }) {
+  const isV2 = version === 'v2';
+  const dsOn = isV2 && showDsMap;
   const isEdit    = mode === 'editSingle' || mode === 'editRecurring';
   const isRecEdit = mode === 'editRecurring';
   // Look up template data for pre-population (use live templateData if provided, fall back to static)
@@ -1169,7 +1212,7 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
         <div className="drawer-hdr">
           <button className="dr-fab" onClick={onClose}>{I.close}</button>
           <div className="dr-title-wrap">
-            <span className="dr-label">{headerLabel}</span>
+            <span className="dr-label">{headerLabel}<span className="ver-badge">{isV2?'V2':'V1'}</span><DSTag show={dsOn} kind="card" name="Drawer" path='size="medium" — Atoms/Drawer'/></span>
             <span className="dr-classname">{cls || (isEdit ? 'Edit class' : 'New class')}</span>
           </div>
           <div className="dr-actions">
@@ -1177,6 +1220,7 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
               <button className="btn-delete" onClick={()=>{onClose();onSave(cls,'delete');}}>Delete</button>
             )}
             <button className="btn-cancel" onClick={onClose}>Cancel</button>
+            <DSTag show={dsOn} name="ButtonV3" path="Atoms/Buttons/Button"/>
             <button className="btn-save" disabled={saveDisabled} onClick={handleSave}>Save</button>
           </div>
         </div>
@@ -1185,39 +1229,65 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
 
           {/* ── Class details card ── */}
           <div className="card">
-            <div className="card-title">Class details</div>
+            <div className="card-title">Class details<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
 
             {/* Schedule type tabs — create mode only */}
             {!isEdit && (
-              <div className="sched-tabs">
-                {[['single','Single class'],['recurring','Recurring schedule'],['dateSpecific','Date specific']].map(([t,l])=>(
-                  <button key={t} className={`sched-tab ${classType===t?'active':''}`} onClick={()=>setClassType(t)}>{l}</button>
-                ))}
-              </div>
+              isV2 ? (
+                <>
+                  <div className="seg-tabs-v2">
+                    {[['single','Single class'],['recurring','Recurring schedule'],['dateSpecific','Date specific']].map(([t,l])=>(
+                      <button key={t} className={`seg-tab-v2 ${classType===t?'active':''}`} onClick={()=>setClassType(t)}>{l}</button>
+                    ))}
+                  </div>
+                  {dsOn && <div style={{marginTop:-10,marginBottom:14}}><DSTag show={dsOn} name='Radio.Group buttonStyle="solid"' path="Atoms/FormControls/Radio"/></div>}
+                </>
+              ) : (
+                <div className="sched-tabs">
+                  {[['single','Single class'],['recurring','Recurring schedule'],['dateSpecific','Date specific']].map(([t,l])=>(
+                    <button key={t} className={`sched-tab ${classType===t?'active':''}`} onClick={()=>setClassType(t)}>{l}</button>
+                  ))}
+                </div>
+              )
             )}
 
             {/* Class */}
             <div className="f-group">
-              <label className="f-label">Class<span className="req">*</span></label>
+              <label className="f-label">Class<span className="req">*</span><DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
               <Sel value={cls} onChange={v=>{setCls(v);setIsDirty(true);}} opts={CLASSES_LIST} placeholder="Select class"/>
             </div>
 
             {/* Trainer + inline substitute checkbox */}
-            <div className="f-group" style={{marginBottom: isEdit ? 14 : 0}}>
-              <label className="f-label">Trainer</label>
+            <div className="f-group" style={{marginBottom: (isEdit || isV2) ? 14 : 0}}>
+              <label className="f-label">Trainer<span className="req">*</span><DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
               <div className="trainer-row">
                 <Sel value={trainer} onChange={v=>{setTrainer(v);setIsSub(false);setIsDirty(true);}} opts={TRAINERS_LIST} placeholder="Select trainer"/>
                 {trainer && (
                   <div className="sub-inline" onClick={()=>{setIsSub(v=>!v);setIsDirty(true);}}>
                     <div className={`sub-chk-box ${isSub?'on':''}`}>{isSub && I.check}</div>
                     <span className="sub-chk-lbl">Mark trainer as substitute</span>
+                    <DSTag show={dsOn} name="Checkbox" path="Atoms/FormControls/Checkbox"/>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Edit-mode extra fields (class type disabled, categories, facility, trainers, size, level) */}
-            {isEdit && (
+            {/* V2 — Facility + Level shown for ALL modes (single, recurring, date-specific, edit) */}
+            {isV2 && (
+              <>
+                <div className="f-group">
+                  <label className="f-label">Facility<span className="req">*</span><DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
+                  <Sel value={facility} onChange={v=>{setFacility(v);setIsDirty(true);}} opts={FACILITIES_LIST} placeholder="Select"/>
+                </div>
+                <div className="f-group" style={{marginBottom:0}}>
+                  <label className="f-label">Level<span className="req">*</span><DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
+                  <Sel value={level} onChange={v=>{setLevel(v);setIsDirty(true);}} opts={LEVEL_OPTS} placeholder="Select"/>
+                </div>
+              </>
+            )}
+
+            {/* V1 edit-mode extra fields (class type disabled, categories, facility, size, level) */}
+            {!isV2 && isEdit && (
               <>
                 <div className="f-group">
                   <label className="f-label">Class type</label>
@@ -1253,16 +1323,16 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
             {/* ── CREATE MODE: show tabs + content per classType ── */}
             {mode === 'create' && (
               <>
-                {classType !== 'dateSpecific' && <div className="card-title">Class scheduling</div>}
+                {classType !== 'dateSpecific' && <div className="card-title">Class scheduling<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>}
 
                 {classType === 'single' && (
                   <>
                     <div className="f-group">
-                      <label className="f-label">Date<span className="req">*</span></label>
+                      <label className="f-label">Date<span className="req">*</span><DSTag show={dsOn} name="DatePicker" path="Atoms/FormControls/DatePicker"/></label>
                       <DateIn value={singleDate} onChange={v=>{setSingleDate(v);setIsDirty(true);}}/>
                     </div>
                     <div className="f-group" style={{marginBottom:0}}>
-                      <label className="f-label">Class time</label>
+                      <label className="f-label">Class time<DSTag show={dsOn} name="TimePicker (range)" path="Atoms/FormControls/TimePicker"/></label>
                       <div className="t-row">
                         <TimePicker value={singleStart} onChange={v=>{setSingleStart(v);setIsDirty(true);}} placeholder="Start"/>
                         <span className="t-arr">→</span>
@@ -1277,12 +1347,12 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                     <div className="f-group">
                       <div className="date-row-wrap">
                         <div className="date-col">
-                          <label className="f-label" style={{marginBottom:0}}>Start date</label>
+                          <label className="f-label" style={{marginBottom:0}}>Start date<DSTag show={dsOn} name="DatePicker" path="Atoms/FormControls/DatePicker"/></label>
                           <DateIn value={startDate} onChange={v=>{setStartDate(v);setIsDirty(true);}}/>
                         </div>
                         <span className="date-sep-mid">to</span>
                         <div className="date-col">
-                          <label className="f-label" style={{marginBottom:0}}>End date</label>
+                          <label className="f-label" style={{marginBottom:0}}>End date<DSTag show={dsOn} name="DatePicker" path="Atoms/FormControls/DatePicker"/></label>
                           <DateIn value={endDate} onChange={v=>{setEndDate(v);setIsDirty(true);}} disabled={noEnd}/>
                         </div>
                         <div className="no-end-row" style={{paddingBottom:6}} onClick={()=>{setNoEnd(v=>!v);setIsDirty(true);}}>
@@ -1290,15 +1360,16 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                             {noEnd && I.check}
                           </div>
                           <span style={{fontSize:13,fontWeight:600,color:'var(--kit-primary)'}}>No end date</span>
+                          <DSTag show={dsOn} name="Checkbox" path="Atoms/FormControls/Checkbox"/>
                         </div>
                       </div>
                     </div>
                     <div className="f-group">
-                      <label className="f-label">Frequency</label>
+                      <label className="f-label">Frequency<DSTag show={dsOn} name="SelectV3 (disabled)" path="Atoms/FormControls/Select"/></label>
                       <div className="freq-locked"><span>Custom</span><span style={{opacity:.5}}>{I.chevD}</span></div>
                     </div>
                     <div className="f-group">
-                      <label className="f-label">Repeats every</label>
+                      <label className="f-label">Repeats every<DSTag show={dsOn} name="InputNumber + SelectV3" path="Atoms/FormControls/InputNumber · Atoms/FormControls/Select"/></label>
                       <div className="every-row">
                         <input type="number" className="every-num" min="1" max="99" value={every} onChange={e=>{setEvery(Math.max(1,Number(e.target.value)));setIsDirty(true);}}/>
                         <Sel value={unit} onChange={v=>{setUnit(v);setIsDirty(true);}} opts={UNIT_OPTS}/>
@@ -1307,7 +1378,7 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                     {isWeek && (
                       <>
                         <div className="f-group">
-                          <label className="f-label">Days</label>
+                          <label className="f-label">Days<DSTag show={dsOn} name='Checkbox.Group buttonStyle="solid"' path="Atoms/FormControls/Checkbox"/></label>
                           <div className="day-sel">
                             {DAY_BTNS.map(d=>(
                               <button key={d} className={`day-btn ${selDays.includes(d)?'on':''}`} onClick={()=>toggleDay(d)}>{d}</button>
@@ -1528,7 +1599,9 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
 }
 
 // ─── Class Definition Drawer (template) — Figma 85-11955 ─────────
-function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, classData }) {
+function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, classData, version='v1', showDsMap=false }) {
+  const isV2 = version === 'v2';
+  const dsOn = isV2 && showDsMap;
   const tpl = classData ? (CLASS_TEMPLATES[classData.name] || {}) : {};
   const [name,        setName]        = useState(classData?.name || '');
   const [desc,        setDesc]        = useState(classData?.desc || '');
@@ -1547,6 +1620,18 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
   const [taxes,       setTaxes]       = useState('');
   const [spotBook,    setSpotBook]    = useState(true);
   const [roomLayout,  setRoomLayout]  = useState('');
+  // V2 — additional state
+  const [eligibleFacilities, setEligibleFacilities] = useState(tpl.eligibleFacilities || []);
+  const [classFormat,        setClassFormat]        = useState(tpl.classFormat || 'In person');
+  const [glofoxBookings,     setGlofoxBookings]     = useState('Enabled');
+  const [maxGlofox,          setMaxGlofox]          = useState('');
+  const [gympassBookings,    setGympassBookings]    = useState('Enabled');
+  const [dropInOn,           setDropInOn]           = useState(false);
+  const [dropInPrice,        setDropInPrice]        = useState('');
+  const [clientCancelOn,     setClientCancelOn]     = useState(false);
+  const [clientCancelFee,    setClientCancelFee]    = useState('');
+  const [emailNotifs,        setEmailNotifs]        = useState(false);
+  const [privateClass,       setPrivateClass]       = useState(false);
 
   if (!open) return null;
 
@@ -1557,11 +1642,12 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
         <div className="drawer-hdr">
           <button className="dr-fab" onClick={onClose}>{I.close}</button>
           <div className="dr-title-wrap">
-            <span className="dr-label">{classData ? 'Edit class template' : 'Create class template'}</span>
+            <span className="dr-label">{classData ? 'Edit class template' : 'Create class template'}<span className="ver-badge">{isV2?'V2':'V1'}</span><DSTag show={dsOn} kind="card" name="Drawer" path='size="medium" — Atoms/Drawer'/></span>
             <span className="dr-classname">{name||(classData ? 'Edit class' : 'New class')}</span>
           </div>
           <div className="dr-actions">
             <button className="btn-cancel" onClick={onClose}>Cancel</button>
+            <DSTag show={dsOn} name="ButtonV3" path="Atoms/Buttons/Button"/>
             <button className="btn-save" onClick={()=>{
               const n = name||(classData?classData.name:'New class');
               onClose();
@@ -1574,22 +1660,22 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
 
           {/* ── Class details ── */}
           <div className="card">
-            <div className="card-title">Class details</div>
+            <div className="card-title">Class details<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
             <div className="f-group">
-              <label className="f-label">Name</label>
+              <label className="f-label">Name<DSTag show={dsOn} name="TextFieldV3" path="Atoms/FormControls/TextField"/></label>
               <input className="f-input" placeholder="Place holder" value={name} onChange={e=>setName(e.target.value)}/>
             </div>
             <div className="f-group">
-              <label className="f-label">Description</label>
+              <label className="f-label">Description<DSTag show={dsOn} name="TextArea" path="Atoms/FormControls/TextField/TextArea"/></label>
               <textarea className="f-textarea" rows="3" placeholder="Place holder" value={desc} onChange={e=>setDesc(e.target.value)}/>
             </div>
             <div className="f-group">
-              <label className="f-label">Colour</label>
+              <label className="f-label">Colour<DSTag show={dsOn} name="SelectV3" path='Atoms/FormControls/Select (children API, optionLabelProp="label")'/></label>
               <ColourSel value={colour} onChange={setColour}/>
-              <div style={{fontSize:12,color:'var(--kit-light)',marginTop:6}}>This colour will represent this class in the calendar</div>
+              <div style={{fontSize:12,color:'var(--kit-light)',marginTop:6}}>This colour will represent this class in the calendar<DSTag show={dsOn} name="InputHint" path="Atoms/Typography/Templates/InputHint"/></div>
             </div>
             <div className="f-group" style={{marginBottom:0}}>
-              <label className="f-label">Image</label>
+              <label className="f-label">Image<DSTag show={dsOn} name="Uploader + ImageCrop" path="Atoms/FormControls/Uploader · Atoms/ImageCrop"/></label>
               <div className="img-upload-row">
                 <button className="img-upload-btn">{I.plus} Upload</button>
                 <span className="img-upload-hint">Image should be less than 1 MB. PNG, JPG or JPEG only</span>
@@ -1599,60 +1685,176 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
 
           {/* ── Class settings ── */}
           <div className="card">
-            <div className="card-title">Class settings</div>
+            <div className="card-title">Class settings<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
             <div className="f-group">
-              <label className="f-label">Class type</label>
-              <SegCtrl options={['Onsite','Online']} value={classType} onChange={setClassType}/>
+              <label className="f-label">{isV2 ? 'Class format' : 'Class type'}<DSTag show={dsOn} name='Radio.Group buttonStyle="solid"' path="Atoms/FormControls/Radio"/></label>
+              {isV2
+                ? <SegCtrl options={['In person','Online']} value={classFormat} onChange={setClassFormat}/>
+                : <SegCtrl options={['Onsite','Online']}   value={classType}   onChange={setClassType}/>}
             </div>
             <div className="f-group">
-              <label className="f-label">Categories</label>
+              <label className="f-label">Categories<DSTag show={dsOn} name='SelectV3 mode="multiple"' path="Atoms/FormControls/Select"/></label>
               <Sel value={category} onChange={setCategory} opts={CATEGORIES_LIST} placeholder="Select all that apply"/>
             </div>
+            {isV2 ? (
+              <div className="f-group">
+                <label className="f-label">Eligible facilities<DSTag show={dsOn} name='SelectV3 mode="multiple"' path="Atoms/FormControls/Select"/></label>
+                <MultiSel value={eligibleFacilities} onChange={setEligibleFacilities} opts={FACILITIES_LIST} placeholder="Select all that apply"/>
+              </div>
+            ) : (
+              <div className="f-group">
+                <label className="f-label">Facility</label>
+                <Sel value={facility} onChange={setFacility} opts={FACILITIES_LIST} placeholder="## FACILITY"/>
+              </div>
+            )}
             <div className="f-group">
-              <label className="f-label">Facility</label>
-              <Sel value={facility} onChange={setFacility} opts={FACILITIES_LIST} placeholder="## FACILITY"/>
-            </div>
-            <div className="f-group">
-              <label className="f-label">Eligible trainers</label>
+              <label className="f-label">Eligible trainers<DSTag show={dsOn} name='SelectV3 mode="multiple"' path="Atoms/FormControls/Select"/></label>
               <MultiSel value={trainers} onChange={setTrainers} opts={TRAINERS_LIST} placeholder="Select all eligible trainers"/>
             </div>
             <div className="f-group">
-              <label className="f-label">Class size</label>
+              <label className="f-label">Class size<DSTag show={dsOn} name="InputNumber" path="Atoms/FormControls/InputNumber"/></label>
               <input className="f-input" type="number" value={classSize} onChange={e=>setClassSize(e.target.value)} placeholder="Enter number here"/>
             </div>
             <div className="f-group" style={{marginBottom:0}}>
-              <label className="f-label">Level</label>
+              <label className="f-label">Level<DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
               <Sel value={level} onChange={setLevel} opts={LEVEL_OPTS}/>
             </div>
           </div>
 
-          {/* ── Pricing ── */}
-          <div className="card">
-            <div className="card-title">Pricing</div>
-            <div className="pricing-tabs">
-              {[['single','Single price'],['different','Different prices'],['free','Free class']].map(([t,l])=>(
-                <button key={t} className={`pricing-tab ${pricingTab===t?'active':''}`} onClick={()=>setPricingTab(t)}>{l}</button>
-              ))}
+          {/* ── Pricing (V1) / Pricing / eligibility (V2) ── */}
+          {isV2 ? (
+            <>
+              <div className="card">
+                <div className="card-title">Pricing / eligibility<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
+
+                {/* Glofox bookings row */}
+                <div className="bk-row">
+                  <span className="bk-row-lbl">Glofox bookings:<DSTag show={dsOn} name='Radio.Group buttonStyle="solid"' path="Atoms/FormControls/Radio"/></span>
+                  <div className="seg-pill">
+                    <button className={glofoxBookings==='Enabled'?'on':''} onClick={()=>setGlofoxBookings('Enabled')}>Enabled</button>
+                    <button className={glofoxBookings==='Disabled'?'on':''} onClick={()=>setGlofoxBookings('Disabled')}>Disabled</button>
+                  </div>
+                  <span style={{fontSize:13,color:'var(--kit-light)',marginLeft:'auto'}}>Max Glofox bookings:<DSTag show={dsOn} name="InputNumber" path="Atoms/FormControls/InputNumber"/></span>
+                  <div className="bk-amt" style={{width:120}}>
+                    <input type="number" value={maxGlofox} onChange={e=>setMaxGlofox(e.target.value)} placeholder="Enter number"/>
+                  </div>
+                </div>
+
+                {/* Gympass bookings row */}
+                <div className="bk-row" style={{marginBottom:14}}>
+                  <span className="bk-row-lbl">Gympass bookings:<DSTag show={dsOn} name='Radio.Group buttonStyle="solid"' path="Atoms/FormControls/Radio"/></span>
+                  <div className="seg-pill">
+                    <button className={gympassBookings==='Enabled'?'on':''} onClick={()=>setGympassBookings('Enabled')}>Enabled</button>
+                    <button className={gympassBookings==='Disabled'?'on':''} onClick={()=>setGympassBookings('Disabled')}>Disabled</button>
+                  </div>
+                </div>
+
+                {dsOn && <div style={{height:1,background:'var(--cape-primary)',margin:'10px 0'}}/>}
+                {dsOn && <div style={{fontSize:10,marginBottom:8}}><DSTag show={dsOn} name="Divider" path="Atoms/Divider"/></div>}
+
+                {/* Pricing tabs */}
+                <div className="ds-tag-row" style={{marginBottom:dsOn?6:0}}>
+                  {dsOn && <DSTag show={dsOn} name='Radio.Group buttonStyle="solid" (3 options)' path="Atoms/FormControls/Radio"/>}
+                </div>
+                <div className="pricing-tabs">
+                  {[['single','Single price'],['different','Different prices'],['free','Free class']].map(([t,l])=>(
+                    <button key={t} className={`pricing-tab ${pricingTab===t?'active':''}`} onClick={()=>setPricingTab(t)}>{l}</button>
+                  ))}
+                </div>
+
+                {/* Drop-in clients */}
+                <div className="bk-toggle-row">
+                  <Toggle checked={dropInOn} onChange={setDropInOn}/><DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
+                  <div className="bk-toggle-body">
+                    <div className="bk-toggle-title">Drop-in clients</div>
+                    <div className="bk-toggle-desc">Allow drop-in clients to attend and set the price.</div>
+                  </div>
+                  <div className="bk-amt"><span className="bk-amt-prefix">€</span><input type="number" value={dropInPrice} onChange={e=>setDropInPrice(e.target.value)} placeholder="Enter amount" disabled={!dropInOn}/></div>
+                  <DSTag show={dsOn} name='TextFieldV3 prefix="€"' path="Atoms/FormControls/TextField"/>
+                  <span style={{fontSize:13,color:'var(--kit-light)'}}>per booking</span>
+                </div>
+
+                {/* Client cancellation fee */}
+                <div className="bk-toggle-row" style={{marginBottom:0}}>
+                  <Toggle checked={clientCancelOn} onChange={setClientCancelOn}/><DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
+                  <div className="bk-toggle-body">
+                    <div className="bk-toggle-title">Clients can cancel and re-pay</div>
+                    <div className="bk-toggle-desc">Charge a fee if a client cancels and re-books.</div>
+                  </div>
+                  <div className="bk-amt"><span className="bk-amt-prefix">€</span><input type="number" value={clientCancelFee} onChange={e=>setClientCancelFee(e.target.value)} placeholder="Enter amount" disabled={!clientCancelOn}/></div>
+                  <DSTag show={dsOn} name='TextFieldV3 prefix="€"' path="Atoms/FormControls/TextField"/>
+                  <span style={{fontSize:13,color:'var(--kit-light)'}}>per booking</span>
+                </div>
+              </div>
+
+              {/* Tax (V2 separate card) */}
+              <div className="card">
+                <div className="card-title">Tax<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
+                <div className="f-group" style={{marginBottom:0}}>
+                  <label className="f-label">Taxes<DSTag show={dsOn} name='SelectV3 mode="multiple"' path="Atoms/FormControls/Select"/></label>
+                  <Sel value={taxes} onChange={setTaxes} opts={['No taxes','VAT 20%','VAT 10%','Custom rate']} placeholder="Select which taxes apply to this class"/>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="card">
+              <div className="card-title">Pricing</div>
+              <div className="pricing-tabs">
+                {[['single','Single price'],['different','Different prices'],['free','Free class']].map(([t,l])=>(
+                  <button key={t} className={`pricing-tab ${pricingTab===t?'active':''}`} onClick={()=>setPricingTab(t)}>{l}</button>
+                ))}
+              </div>
+              <div className="f-group" style={{marginBottom:0}}>
+                <label className="f-label">Taxes</label>
+                <Sel value={taxes} onChange={setTaxes} opts={['No taxes','VAT 20%','VAT 10%','Custom rate']} placeholder="Select which taxes apply to this class"/>
+              </div>
             </div>
-            <div className="f-group" style={{marginBottom:0}}>
-              <label className="f-label">Taxes</label>
-              <Sel value={taxes} onChange={setTaxes} opts={['No taxes','VAT 20%','VAT 10%','Custom rate']} placeholder="Select which taxes apply to this class"/>
-            </div>
-          </div>
+          )}
 
           {/* ── Spot booking ── */}
           <div className="card">
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:spotBook?16:0}}>
-              <div className="card-title" style={{margin:0}}>Spot booking</div>
-              <Toggle checked={spotBook} onChange={setSpotBook}/>
-            </div>
-            {spotBook && (
-              <div className="f-group" style={{marginBottom:0}}>
-                <label className="f-label">Room layout</label>
-                <Sel value={roomLayout} onChange={setRoomLayout} opts={['Standard','Theatre','Classroom','Horseshoe']} placeholder="Select room layout"/>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:(spotBook && !isV2) ? 16 : 0}}>
+              <div className="card-title" style={{margin:0}}>Spot booking<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
+              <div style={{display:'flex',alignItems:'center',gap:6}}>
+                <Toggle checked={spotBook} onChange={setSpotBook}/>
+                <DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
               </div>
+            </div>
+            {isV2 ? (
+              <>
+                <a href="#" onClick={e=>e.preventDefault()} style={{display:'inline-block',marginTop:12,fontSize:13,fontWeight:700,color:'var(--arctic-primary)',textDecoration:'underline'}}>Learn more</a>
+                <DSTag show={dsOn} name="ButtonV3 (link variant)" path="Atoms/Buttons/Button"/>
+              </>
+            ) : (
+              spotBook && (
+                <div className="f-group" style={{marginBottom:0}}>
+                  <label className="f-label">Room layout</label>
+                  <Sel value={roomLayout} onChange={setRoomLayout} opts={['Standard','Theatre','Classroom','Horseshoe']} placeholder="Select room layout"/>
+                </div>
+              )
             )}
           </div>
+
+          {/* ── Advanced settings (V2 only) ── */}
+          {isV2 && (
+            <div className="card">
+              <div className="card-title">Advanced settings<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
+              <div className="bk-toggle-row">
+                <Toggle checked={emailNotifs} onChange={setEmailNotifs}/><DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
+                <div className="bk-toggle-body">
+                  <div className="bk-toggle-title">Email booking notifications</div>
+                  <div className="bk-toggle-desc">When enabled, assigned trainers and admins will be notified when a member books or cancels.</div>
+                </div>
+              </div>
+              <div className="bk-toggle-row" style={{marginBottom:0}}>
+                <Toggle checked={privateClass} onChange={setPrivateClass}/><DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
+                <div className="bk-toggle-body">
+                  <div className="bk-toggle-title">Private</div>
+                  <div className="bk-toggle-desc">When enabled, this class is hidden from the member app.</div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* ── Schedules ── */}
           <div className="card">
@@ -2155,7 +2357,7 @@ const DEF_ADMIN_DEFS = [
   ]},
 ];
 
-function AdminPanel({ fc, onFc, defFc, onDefFc, onClose }) {
+function AdminPanel({ fc, onFc, defFc, onDefFc, onClose, version, onVersion, showDsMap, onShowDsMap }) {
   const [tab, setTab] = useState('class');
   const isClass = tab==='class';
   const defs = isClass ? ADMIN_DEFS : DEF_ADMIN_DEFS;
@@ -2173,11 +2375,31 @@ function AdminPanel({ fc, onFc, defFc, onDefFc, onClose }) {
         </div>
         <button className="admin-close" onClick={onClose}>{I.close}</button>
       </div>
-      <div className="admin-tabs">
-        <button className={`admin-tab ${tab==='class'?'active':''}`} onClick={()=>setTab('class')}>Create Class</button>
-        <button className={`admin-tab ${tab==='definition'?'active':''}`} onClick={()=>setTab('definition')}>Class Template</button>
-      </div>
       <div className="admin-panel-body">
+        <div className="admin-sec">
+          <div className="admin-sec-title">Prototype version</div>
+          <div style={{fontSize:11,color:'var(--kit-lighter)',marginBottom:8}}>Switch between iterations of this prototype.</div>
+          <div className="ver-switch">
+            <button className={version==='v1'?'active':''} onClick={()=>onVersion('v1')}>V1</button>
+            <button className={version==='v2'?'active':''} onClick={()=>onVersion('v2')}>V2</button>
+          </div>
+        </div>
+        {version==='v2' && (
+          <div className="admin-sec">
+            <div className="admin-field-row" style={{padding:'10px 12px',background:'var(--cape-lighter)',borderRadius:'var(--r-md)'}}>
+              <div>
+                <div className="admin-f-name">Show design system mapping</div>
+                <div className="admin-f-desc">Display the matching <code style={{fontSize:10,background:'var(--cape-primary)',padding:'1px 4px',borderRadius:3}}>react-components</code> export on each V2 field.</div>
+              </div>
+              <Toggle checked={showDsMap} onChange={onShowDsMap}/>
+            </div>
+          </div>
+        )}
+        <div style={{height:1,background:'var(--cape-primary)',margin:'4px 0 14px'}}/>
+        <div className="admin-tabs" style={{marginBottom:14}}>
+          <button className={`admin-tab ${tab==='class'?'active':''}`} onClick={()=>setTab('class')}>Create Class</button>
+          <button className={`admin-tab ${tab==='definition'?'active':''}`} onClick={()=>setTab('definition')}>Class Template</button>
+        </div>
         <div className="admin-notice">
           {I.info}
           <span>{isClass?'Controls the Create Class scheduling drawer.':'Controls the Class Template creation drawer.'}</span>
@@ -2221,6 +2443,14 @@ function App() {
   const [templateData,  setTemplateData]  = useState(()=>({...CLASS_TEMPLATES}));
   const [createMenu,    setCreateMenu]    = useState(false);
   const [adminOpen,     setAdmin]         = useState(false);
+  const [version,       setVersion]       = useState(()=>{
+    try { return localStorage.getItem('cs-version') || 'v1'; } catch { return 'v1'; }
+  });
+  const [showDsMap,     setShowDsMap]     = useState(()=>{
+    try { return localStorage.getItem('cs-ds-map') === '1'; } catch { return false; }
+  });
+  useEffect(()=>{ try { localStorage.setItem('cs-version', version); } catch {} }, [version]);
+  useEffect(()=>{ try { localStorage.setItem('cs-ds-map', showDsMap?'1':'0'); } catch {} }, [showDsMap]);
   const [fc,            setFc]            = useState(DEFAULT_FC);
   const [defFc,         setDefFc]         = useState(DEFAULT_DEF_FC);
   const [toast,         setToast]         = useState(null);
@@ -2267,7 +2497,7 @@ function App() {
       {/* ── Main ── */}
       <div className="main">
         <div className="top-hdr">
-          <span className="page-title">{appView==='calendar'?'Calendar':'Manage'}</span>
+          <span className="page-title">{appView==='calendar'?'Calendar':'Manage'}<span className="ver-badge">{version.toUpperCase()}</span></span>
           <div className="hdr-right">
             <div className="search-box">{I.search}<input placeholder="Search Glofox"/></div>
             <button style={{color:'var(--kit-light)',width:30,height:30,display:'flex',alignItems:'center',justifyContent:'center'}}>{I.menu}</button>
@@ -2337,6 +2567,8 @@ function App() {
           mode={drawer.mode}
           event={drawer.event}
           templates={templateData}
+          version={version}
+          showDsMap={showDsMap}
         />
       )}
 
@@ -2352,6 +2584,8 @@ function App() {
         defFc={defFc}
         onGoToCalendar={handleGoToCalendar}
         classData={defDrawerData}
+        version={version}
+        showDsMap={showDsMap}
       />
 
       {/* ── Event popup ── */}
@@ -2391,6 +2625,10 @@ function App() {
           fc={fc}     onFc={setFc}
           defFc={defFc} onDefFc={setDefFc}
           onClose={()=>setAdmin(false)}
+          version={version}
+          onVersion={setVersion}
+          showDsMap={showDsMap}
+          onShowDsMap={setShowDsMap}
         />
       )}
 
