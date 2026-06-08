@@ -657,7 +657,7 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect, useLayoutEffect, useRef } = React;
 
 // ─── Constants ────────────────────────────────────────────────────
 const WEEK_DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -986,6 +986,24 @@ function DateIn({ value, onChange, disabled }) {
     setOpen(v=>!v);
   };
 
+  // Flip the popover above the field if there is not enough room below.
+  useLayoutEffect(() => {
+    if (!open || !popRef.current || !trigRef.current) return;
+    const r  = trigRef.current.getBoundingClientRect();
+    const ph = popRef.current.offsetHeight;
+    const pw = popRef.current.offsetWidth;
+    const MARGIN = 8;
+    const spaceBelow = window.innerHeight - r.bottom;
+    const spaceAbove = r.top;
+    let top = r.bottom + 4;
+    if (spaceBelow < ph + MARGIN && spaceAbove > spaceBelow) {
+      top = Math.max(MARGIN, r.top - ph - 4);
+    }
+    let left = Math.min(r.left, window.innerWidth - pw - MARGIN);
+    left = Math.max(MARGIN, left);
+    setPos({ top, left });
+  }, [open]);
+
   const today = new Date();
   const todayKey = toDateKey(today.getFullYear(), today.getMonth(), today.getDate());
   const display  = value ? value.split('-').slice(1).reverse().join('/').replace(/^(\d+)\/(\d+)/,'$1/$2')+'/'+value.split('-')[0] : '';
@@ -1069,6 +1087,24 @@ function TimePicker({ value, onChange, placeholder }) {
     setOpen(v=>!v);
   };
 
+  // Flip the popover above the field if there is not enough room below.
+  useLayoutEffect(() => {
+    if (!open || !popRef.current || !trigRef.current) return;
+    const r  = trigRef.current.getBoundingClientRect();
+    const ph = popRef.current.offsetHeight;
+    const pw = popRef.current.offsetWidth;
+    const MARGIN = 8;
+    const spaceBelow = window.innerHeight - r.bottom;
+    const spaceAbove = r.top;
+    let top = r.bottom + 4;
+    if (spaceBelow < ph + MARGIN && spaceAbove > spaceBelow) {
+      top = Math.max(MARGIN, r.top - ph - 4);
+    }
+    let left = Math.min(r.left, window.innerWidth - pw - MARGIN);
+    left = Math.max(MARGIN, left);
+    setPos({ top, left });
+  }, [open]);
+
   return (
     <div ref={trigRef} className="tp-wrap">
       <div className={`tp-trigger ${open?'tp-open':''}`} onClick={openPop}>
@@ -1129,12 +1165,21 @@ function DatePickerCal({ selected, onSelect, onDone, anchor }) {
   });
   const popRef = useRef(null);
 
-  useEffect(()=>{
-    if (anchor?.current) {
-      const r = anchor.current.getBoundingClientRect();
-      const left = Math.min(r.right-300, window.innerWidth-316);
-      setPos({ top: r.bottom+4, left: Math.max(8,left) });
+  useLayoutEffect(()=>{
+    if (!anchor?.current || !popRef.current) return;
+    const r  = anchor.current.getBoundingClientRect();
+    const ph = popRef.current.offsetHeight;
+    const pw = popRef.current.offsetWidth;
+    const MARGIN = 8;
+    const spaceBelow = window.innerHeight - r.bottom;
+    const spaceAbove = r.top;
+    let top = r.bottom + 4;
+    if (spaceBelow < ph + MARGIN && spaceAbove > spaceBelow) {
+      top = Math.max(MARGIN, r.top - ph - 4);
     }
+    let left = Math.min(r.right - pw, window.innerWidth - pw - MARGIN);
+    left = Math.max(MARGIN, left);
+    setPos({ top, left });
   },[]);
 
   useEffect(()=>{
