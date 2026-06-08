@@ -130,7 +130,13 @@
     .time-lbl{font-size:11px;color:var(--kit-lighter);padding:6px 4px 0;text-align:right;border-right:1px solid var(--cape-primary);position:relative;top:-8px;font-weight:600}
     .day-cell{border-right:1px solid var(--cape-primary);border-bottom:1px solid var(--cape-primary);min-height:54px;padding:3px;cursor:pointer;transition:background .1s;position:relative}
     .day-cell:hover:not(.filled){background:var(--arctic-lightest)}
-    .ev{border-radius:var(--r-sm);padding:4px 7px;margin-bottom:2px;cursor:pointer;transition:opacity .1s}
+    .f-hint{display:flex;gap:8px;align-items:flex-start;margin-top:8px;padding:8px 10px;border-radius:var(--r-md);font-size:12px;line-height:18px}
+    .f-hint-info{background:#EEF0FF;color:#3C2EAA;border:1px solid #DCDCFE}
+    .f-hint-info svg{flex-shrink:0;margin-top:1px;color:#5B57E0}
+    .ev{border-radius:var(--r-sm);padding:4px 7px;margin-bottom:2px;cursor:pointer;transition:opacity .1s;position:relative}
+    .ev-cancelled{filter:grayscale(.85);opacity:.7}
+    .ev-cancelled .ev-title,.ev-cancelled .ev-time,.ev-cancelled .ev-inst{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.85)}
+    .ev-cancelled-tag{display:inline-block;background:rgba(0,0,0,.4);color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:1px 6px;border-radius:8px;margin-bottom:2px}
     .ev:hover{opacity:.88}
     .ev-title{font-size:12px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .ev-time{font-size:10px;color:rgba(255,255,255,.8);margin-top:1px}
@@ -359,6 +365,14 @@
     /* ── Confirm / overlay modal ── */
     .modal-overlay{position:fixed;inset:0;background:rgba(25,28,35,.5);z-index:60;display:flex;align-items:center;justify-content:center}
     .modal-box{background:var(--pale-primary);border-radius:var(--r-lg);box-shadow:0 10px 40px rgba(25,28,35,.2);width:480px;max-width:calc(100vw - 32px)}
+    .del-modal{width:520px}
+    .del-modal .modal-body{display:flex;flex-direction:column;gap:10px;padding-top:6px}
+    .del-option{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--cape-dark);border-radius:var(--r-lg);padding:14px 16px;background:var(--pale-primary);text-align:left;cursor:pointer;transition:border-color .12s,box-shadow .12s;width:100%;font-family:var(--font)}
+    .del-option:hover{border-color:var(--arctic-primary);box-shadow:0 1px 6px rgba(75,70,193,.08)}
+    .del-option-ico{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .del-option-text{display:flex;flex-direction:column;gap:4px;flex:1}
+    .del-option-title{font-size:14px;font-weight:700;color:var(--kit-primary)}
+    .del-option-desc{font-size:12px;line-height:18px;color:var(--kit-light)}
     .modal-hdr{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between}
     .modal-title{font-size:18px;font-weight:700}
     .modal-body{padding:16px 24px 4px}
@@ -667,7 +681,8 @@ const WEEK_DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const WEEK_DATES  = [18,19,20,21,22,23,24];
 const TODAY_IDX   = 3;
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const CLASSES_LIST    = ['Hyrox 45','Yoga Flow','HIIT Training','Spin Class','Pilates Core','Boxing Fundamentals','CrossFit WOD','Abs & Core'];
+const PLACEHOLDER_TPL = 'Placeholder template';
+const CLASSES_LIST    = [PLACEHOLDER_TPL, 'Hyrox 45','Yoga Flow','HIIT Training','Spin Class','Pilates Core','Boxing Fundamentals','CrossFit WOD','Abs & Core'];
 const TRAINERS_LIST   = ['Alex Trainer','Sarah Chen','Mike Johnson','Emma Davis','David Brown','Conner Behan','Joe Soap'];
 const CATEGORIES_LIST = ['Yoga','HIIT','Cycling','Boxing','Pilates','Strength Training','Cardio','Wellness'];
 const FACILITIES_LIST = ['Main Studio','Gym Floor','Spin Room','Outdoor Area','Pool Deck','Boxing Gym','Golf simulator'];
@@ -1257,7 +1272,7 @@ function V2ColourSel({ value, onChange }) {
 }
 
 // ─── Class Drawer (Create + Edit) ────────────────────────────────
-function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templates, version='v1', initialSlot=null }) {
+function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templates, version='v2', initialSlot=null, onDelete }) {
   const isV2 = version === 'v2';
   const isEdit    = mode === 'editSingle' || mode === 'editRecurring';
   const isRecEdit = mode === 'editRecurring';
@@ -1292,8 +1307,10 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
   const [singleStart,setSingleStart]= useState(isEdit ? `${String(evH).padStart(2,'0')}:00` : slotStart);
   const [singleEnd,  setSingleEnd]  = useState(isEdit ? `${String(evH+1).padStart(2,'0')}:00` : slotEnd);
 
-  // V2 — Private toggle (shown last in every create-mode scenario)
+  // V2 — Private toggle (shown last on every schedule type/mode)
   const [privSched, setPrivSched]   = useState(false);
+  // Delete-class modal (edit modes only)
+  const [showDelMenu, setShowDelMenu] = useState(false);
 
   // Switching schedule type: persist the slot's date/time on Single → Recurring
   // (carry the date over as the recurring start date), and clear it for
@@ -1417,12 +1434,12 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
         <div className="drawer-hdr">
           <button className="dr-fab" onClick={onClose}>{I.close}</button>
           <div className="dr-title-wrap">
-            <span className="dr-label">{headerLabel}<span className="ver-badge">{isV2?'V2':'V1'}</span></span>
+            <span className="dr-label">{headerLabel}</span>
             <span className="dr-classname">{cls || (isEdit ? 'Edit class' : 'New class')}</span>
           </div>
           <div className="dr-actions">
             {isEdit && (
-              <button className="btn-delete" onClick={()=>{onClose();onSave(cls,'delete');}}>Delete</button>
+              <button className="btn-delete" onClick={()=>setShowDelMenu(true)}>Delete</button>
             )}
             <button className="btn-cancel" onClick={onClose}>Cancel</button>
             
@@ -1459,6 +1476,12 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
             <div className="f-group">
               <label className="f-label">Class<span className="req">*</span></label>
               <Sel value={cls} onChange={v=>{setCls(v);setIsDirty(true);}} opts={CLASSES_LIST} placeholder="Select class"/>
+              {cls === PLACEHOLDER_TPL && (
+                <div className="f-hint f-hint-info">
+                  {I.info}
+                  <span><strong>Placeholder schedule.</strong> Reserves the time slot with basic info. An admin can replace it with a real class template later.</span>
+                </div>
+              )}
             </div>
 
             {/* Trainer + inline substitute checkbox */}
@@ -1667,18 +1690,6 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                   </>
                 )}
 
-                {/* ── V2 Private toggle — shown last on every schedule type (Figma 1012:22986) ── */}
-                {isV2 && (
-                  <div style={{marginTop:24,paddingTop:16,borderTop:'1px solid var(--cape-primary)'}}>
-                    <div className="v2-priv-row" onClick={()=>{setPrivSched(v=>!v);setIsDirty(true);}} style={{cursor:'pointer'}}>
-                      <Toggle checked={privSched} onChange={v=>{setPrivSched(v);setIsDirty(true);}}/>
-                      <div className="v2-priv-text">
-                        <span className="priv-title">Private</span>
-                        <span className="priv-desc">By enabling this setting you make this class hidden from the member app</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </>
             )}
 
@@ -1795,6 +1806,17 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                 )}
               </>
             )}
+
+            {/* ── Private toggle — always shown last on every schedule type/mode (Figma 1012:22986 / 350:33478) ── */}
+            <div style={{marginTop:24,paddingTop:16,borderTop:'1px solid var(--cape-primary)'}}>
+              <div className="v2-priv-row" onClick={()=>{setPrivSched(v=>!v);setIsDirty(true);}} style={{cursor:'pointer'}}>
+                <Toggle checked={privSched} onChange={v=>{setPrivSched(v);setIsDirty(true);}}/>
+                <div className="v2-priv-text">
+                  <span className="priv-title">Private</span>
+                  <span className="priv-desc">By enabling this setting you make this class hidden from the member app</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1830,13 +1852,44 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
             </div>
           </div>
         )}
+
+        {/* ── Delete class modal (edit modes) — Cancel vs Delete ── */}
+        {showDelMenu && (
+          <div className="modal-overlay" onClick={e=>{if(e.target.className==='modal-overlay')setShowDelMenu(false);}}>
+            <div className="modal-box del-modal" onClick={e=>e.stopPropagation()}>
+              <div className="modal-hdr">
+                <span className="modal-title">How would you like to delete this class?</span>
+                <button style={{width:28,height:28,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--kit-light)'}} onClick={()=>setShowDelMenu(false)}>{I.close}</button>
+              </div>
+              <div className="modal-body">
+                <button className="del-option" onClick={()=>{setShowDelMenu(false);onClose();onSave(cls,'cancel');}}>
+                  <div className="del-option-ico" style={{background:'var(--cape-light)',color:'var(--kit-primary)'}}>{I.info}</div>
+                  <div className="del-option-text">
+                    <div className="del-option-title">Cancel class</div>
+                    <div className="del-option-desc">The class stays on the calendar marked as <strong>Cancelled</strong>. Members are notified and bookings are released.</div>
+                  </div>
+                </button>
+                <button className="del-option" onClick={()=>{setShowDelMenu(false);onClose();onSave(cls,'delete');}}>
+                  <div className="del-option-ico" style={{background:'#FEE7EA',color:'#DE233C'}}>{I.trash}</div>
+                  <div className="del-option-text">
+                    <div className="del-option-title">Delete from schedule</div>
+                    <div className="del-option-desc">The class is removed from the calendar entirely. This cannot be undone.</div>
+                  </div>
+                </button>
+              </div>
+              <div className="modal-footer">
+                <button className="btn-cancel" onClick={()=>setShowDelMenu(false)}>Close</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
 }
 
 // ─── Class Definition Drawer (template) — Figma 85-11955 ─────────
-function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, classData, version='v1' }) {
+function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, classData, version='v2' }) {
   const isV2 = version === 'v2';
   const tpl = classData ? (CLASS_TEMPLATES[classData.name] || {}) : {};
   const [name,        setName]        = useState(classData?.name || '');
@@ -1900,7 +1953,7 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
         <div className="drawer-hdr">
           <button className="dr-fab" onClick={onClose}>{I.close}</button>
           <div className="dr-title-wrap">
-            <span className="dr-label">{classData ? 'Edit class template' : 'Create class template'}<span className="ver-badge">{isV2?'V2':'V1'}</span></span>
+            <span className="dr-label">{classData ? 'Edit class template' : 'Create class template'}</span>
             <span className="dr-classname">{name||(classData ? 'Edit class' : 'New class')}</span>
           </div>
           <div className="dr-actions">
@@ -2501,7 +2554,8 @@ function DuplicateModal({ event, onClose, onDone }) {
 }
 
 // ─── Week View ────────────────────────────────────────────────────
-function WeekView({ onSlotClick, fc, onEventClick, templates }) {
+function WeekView({ onSlotClick, fc, onEventClick, templates, cancelledMap = {} }) {
+  const evState = ev => cancelledMap[`${ev.d}-${ev.h}-${ev.t}`];
   const [slotMenu, setSlotMenu] = useState(null);
 
   const handleCell = (e, di, hv) => {
@@ -2539,22 +2593,26 @@ function WeekView({ onSlotClick, fc, onEventClick, templates }) {
             <React.Fragment key={hi}>
               <div className="time-lbl">{hr.lbl}</div>
               {WEEK_DAYS.map((_,di)=>{
-                const evs = EVENTS.filter(ev=>ev.d===di&&ev.h===hr.v);
+                const evs = EVENTS.filter(ev=>ev.d===di&&ev.h===hr.v && evState(ev) !== 'deleted');
                 return (
                   <div key={di} className={`day-cell ${evs.length?'filled':''}`} onClick={e=>handleCell(e,di,hr.v)}>
-                    {evs.map((ev,ei)=>(
-                      <div key={ei} className={`ev ${fc.showEventPopup?'clickable':''}`}
-                        style={{background:(templates?.[ev.t]?.colour || ev.c)}} onClick={e=>handleEvClick(e,ev)}>
-                        <div className="ev-title">{ev.t}</div>
-                        <div className="ev-time">{ev.ti}</div>
-                        <div className="ev-bottom">
-                          <div className="ev-inst">
-                            {(templates?.[ev.t]?.trainer || ev.i)}{ev.isSub&&<span className="ev-sub">Sub</span>}
+                    {evs.map((ev,ei)=>{
+                      const isCancelled = evState(ev) === 'cancelled';
+                      return (
+                        <div key={ei} className={`ev ${fc.showEventPopup?'clickable':''} ${isCancelled?'ev-cancelled':''}`}
+                          style={{background:(templates?.[ev.t]?.colour || ev.c)}} onClick={e=>handleEvClick(e,ev)}>
+                          {isCancelled && <div className="ev-cancelled-tag">Cancelled</div>}
+                          <div className="ev-title">{ev.t}</div>
+                          <div className="ev-time">{ev.ti}</div>
+                          <div className="ev-bottom">
+                            <div className="ev-inst">
+                              {(templates?.[ev.t]?.trainer || ev.i)}{ev.isSub&&<span className="ev-sub">Sub</span>}
+                            </div>
+                            {ev.recurring&&<div className="ev-recurr-ico" title="Recurring">{I.recurr}</div>}
                           </div>
-                          {ev.recurring&&<div className="ev-recurr-ico" title="Recurring">{I.recurr}</div>}
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 );
               })}
@@ -2741,7 +2799,7 @@ const DEF_ADMIN_DEFS = [
   ]},
 ];
 
-function AdminPanel({ fc, onFc, defFc, onDefFc, onClose, version, onVersion }) {
+function AdminPanel({ fc, onFc, defFc, onDefFc, onClose }) {
   const [tab, setTab] = useState('class');
   const isClass = tab==='class';
   const defs = isClass ? ADMIN_DEFS : DEF_ADMIN_DEFS;
@@ -2760,15 +2818,6 @@ function AdminPanel({ fc, onFc, defFc, onDefFc, onClose, version, onVersion }) {
         <button className="admin-close" onClick={onClose}>{I.close}</button>
       </div>
       <div className="admin-panel-body">
-        <div className="admin-sec">
-          <div className="admin-sec-title">Prototype version</div>
-          <div style={{fontSize:11,color:'var(--kit-lighter)',marginBottom:8}}>Switch between iterations of this prototype.</div>
-          <div className="ver-switch">
-            <button className={version==='v1'?'active':''} onClick={()=>onVersion('v1')}>V1</button>
-            <button className={version==='v2'?'active':''} onClick={()=>onVersion('v2')}>V2</button>
-          </div>
-        </div>
-        <div style={{height:1,background:'var(--cape-primary)',margin:'4px 0 14px'}}/>
         <div className="admin-tabs" style={{marginBottom:14}}>
           <button className={`admin-tab ${tab==='class'?'active':''}`} onClick={()=>setTab('class')}>Create Class</button>
           <button className={`admin-tab ${tab==='definition'?'active':''}`} onClick={()=>setTab('definition')}>Class Template</button>
@@ -2816,16 +2865,15 @@ function App() {
   const [templateData,  setTemplateData]  = useState(()=>({...CLASS_TEMPLATES}));
   const [createMenu,    setCreateMenu]    = useState(false);
   const [adminOpen,     setAdmin]         = useState(false);
-  const [version,       setVersion]       = useState(()=>{
-    try { return localStorage.getItem('cs-version') || 'v1'; } catch { return 'v1'; }
-  });
-  useEffect(()=>{ try { localStorage.setItem('cs-version', version); } catch {} }, [version]);
+  const version = 'v2';
   const [fc,            setFc]            = useState(DEFAULT_FC);
   const [defFc,         setDefFc]         = useState(DEFAULT_DEF_FC);
   const [toast,         setToast]         = useState(null);
   const [eventPopup,    setEventPopup]    = useState(null);
   const [dupModal,      setDupModal]      = useState(null);
   const [bookingEvent,  setBookingEvent]  = useState(null);
+  const [cancelledEvents, setCancelledEvents] = useState({});  // key → 'cancelled' | 'deleted'
+  const eventKey = e => `${e?.d ?? 'x'}-${e?.h ?? 'x'}-${e?.t ?? 'x'}`;
 
   const showToast  = msg => setToast(msg);
   const openCreate = (slot=null) => { setDrawer({mode:'create',event:null,initialSlot:slot}); setCreateMenu(false); };
@@ -2866,7 +2914,7 @@ function App() {
       {/* ── Main ── */}
       <div className="main">
         <div className="top-hdr">
-          <span className="page-title">{appView==='calendar'?'Calendar':'Manage'}<span className="ver-badge">{version.toUpperCase()}</span></span>
+          <span className="page-title">{appView==='calendar'?'Calendar':'Manage'}</span>
           <div className="hdr-right">
             <div className="search-box">{I.search}<input placeholder="Search Glofox"/></div>
             <button style={{color:'var(--kit-light)',width:30,height:30,display:'flex',alignItems:'center',justifyContent:'center'}}>{I.menu}</button>
@@ -2910,7 +2958,7 @@ function App() {
                   </div>
                 </div>
               </div>
-              <WeekView onSlotClick={openCreate} fc={fc} onEventClick={p=>setEventPopup(p)} templates={templateData}/>
+              <WeekView onSlotClick={openCreate} fc={fc} onEventClick={p=>setEventPopup(p)} templates={templateData} cancelledMap={cancelledEvents}/>
             </div>
           </div>
         ) : (
@@ -2930,7 +2978,13 @@ function App() {
           open={true}
           onClose={()=>setDrawer(null)}
           onSave={(name,action)=>{
-            if(action==='delete') showToast(`"${name}" deleted`);
+            if(action==='delete') {
+              if(drawer.event) setCancelledEvents(s=>({...s, [eventKey(drawer.event)]:'deleted'}));
+              showToast(`"${name}" deleted from schedule`);
+            } else if(action==='cancel') {
+              if(drawer.event) setCancelledEvents(s=>({...s, [eventKey(drawer.event)]:'cancelled'}));
+              showToast(`"${name}" cancelled`);
+            }
             else showToast(drawer.mode==='create' ? `"${name}" scheduled` : `"${name}" updated successfully`);
           }}
           mode={drawer.mode}
@@ -2993,8 +3047,6 @@ function App() {
           fc={fc}     onFc={setFc}
           defFc={defFc} onDefFc={setDefFc}
           onClose={()=>setAdmin(false)}
-          version={version}
-          onVersion={setVersion}
         />
       )}
 
