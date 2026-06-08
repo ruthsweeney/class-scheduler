@@ -1542,6 +1542,17 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                 </div>
               </>
             )}
+
+            {/* ── Private toggle — last item in Class details card on every schedule type/mode (Figma 350:33478 / 1012:22986) ── */}
+            <div style={{marginTop:20,paddingTop:16,borderTop:'1px solid var(--cape-primary)'}}>
+              <div className="v2-priv-row" onClick={()=>{setPrivSched(v=>!v);setIsDirty(true);}} style={{cursor:'pointer'}}>
+                <Toggle checked={privSched} onChange={v=>{setPrivSched(v);setIsDirty(true);}}/>
+                <div className="v2-priv-text">
+                  <span className="priv-title">Private</span>
+                  <span className="priv-desc">By enabling this setting you make this class hidden from the member app</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* ── Class scheduling card ── */}
@@ -1806,17 +1817,6 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                 )}
               </>
             )}
-
-            {/* ── Private toggle — always shown last on every schedule type/mode (Figma 1012:22986 / 350:33478) ── */}
-            <div style={{marginTop:24,paddingTop:16,borderTop:'1px solid var(--cape-primary)'}}>
-              <div className="v2-priv-row" onClick={()=>{setPrivSched(v=>!v);setIsDirty(true);}} style={{cursor:'pointer'}}>
-                <Toggle checked={privSched} onChange={v=>{setPrivSched(v);setIsDirty(true);}}/>
-                <div className="v2-priv-text">
-                  <span className="priv-title">Private</span>
-                  <span className="priv-desc">By enabling this setting you make this class hidden from the member app</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
