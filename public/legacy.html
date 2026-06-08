@@ -207,6 +207,26 @@
     .ver-badge{display:inline-flex;align-items:center;gap:4px;background:var(--arctic-lightest);color:var(--arctic-primary);font-size:11px;font-weight:800;padding:2px 8px;border-radius:10px;letter-spacing:.5px;text-transform:uppercase;margin-left:8px}
 
     /* ── DS component map tags (V2 inspector mode) ── */
+    .ds-tag,a.ds-tag{display:inline-flex;align-items:center;gap:3px;background:#FDF4E6;color:#B45309;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;letter-spacing:.2px;margin-left:6px;font-family:'Monaco','Menlo',monospace;border:1px solid #F5D9A8;cursor:pointer;vertical-align:middle;line-height:1.4;text-decoration:none;white-space:nowrap}
+    .ds-tag:hover,a.ds-tag:hover{background:#FBE9C8;text-decoration:none}
+    .ds-tag-card,a.ds-tag-card{display:inline-flex;align-items:center;gap:3px;background:#EEF7FB;color:#0079C4;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;letter-spacing:.2px;margin-left:8px;font-family:'Monaco','Menlo',monospace;border:1px solid #BFE0EE;cursor:pointer;line-height:1.4;text-decoration:none;white-space:nowrap}
+    .ds-tag-card:hover,a.ds-tag-card:hover{background:#D9EEF6;text-decoration:none}
+    .ds-tag-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+
+    /* DS map index modal (devs reference all mappings) */
+    .dsmap-backdrop{position:fixed;inset:0;background:rgba(25,28,35,.5);z-index:1500;display:flex;align-items:center;justify-content:center;padding:24px}
+    .dsmap-modal{background:#fff;border-radius:12px;width:720px;max-width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(25,28,35,.25)}
+    .dsmap-hdr{padding:16px 20px;border-bottom:1px solid var(--cape-primary);display:flex;align-items:center;justify-content:space-between}
+    .dsmap-title{font-size:16px;font-weight:800}
+    .dsmap-sub{font-size:12px;color:var(--kit-light);margin-top:2px}
+    .dsmap-body{flex:1;overflow-y:auto;padding:0}
+    .dsmap-row{display:grid;grid-template-columns:1.4fr 1.6fr 1fr;gap:12px;padding:10px 20px;border-bottom:1px solid var(--cape-light);font-size:13px;align-items:center}
+    .dsmap-row:hover{background:var(--cape-lighter)}
+    .dsmap-row .n{font-family:'Monaco','Menlo',monospace;font-size:12px;font-weight:700;color:#B45309}
+    .dsmap-row .p{color:var(--kit-light);font-size:12px}
+    .dsmap-row .l a{color:var(--arctic-primary);font-weight:700;font-size:12px;text-decoration:none}
+    .dsmap-row .l a:hover{text-decoration:underline}
+    .dsmap-hdrrow{position:sticky;top:0;background:var(--cape-lighter);font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--kit-light);padding:10px 20px;display:grid;grid-template-columns:1.4fr 1.6fr 1fr;gap:12px;border-bottom:1px solid var(--cape-primary)}
 
     /* ── V2 segmented tabs (used in ClassDrawer V2) ── */
     .seg-tabs-v2{display:inline-flex;background:var(--pale-primary);border:1.5px solid var(--cape-dark);border-radius:var(--r-md);padding:2px;gap:0;margin-bottom:16px}
@@ -546,112 +566,6 @@
     .img-upload-hint{font-size:12px;color:var(--kit-lighter);line-height:1.5}
     /* ── Class settings card ── */
     .settings-card-title{font-size:16px;font-weight:700;color:var(--kit-primary);margin-bottom:16px}
-
-    /* ──────────────────────────────────────────────────────────────
-       V2 — Glofox DS components (Figma 274:25513, 350:33484, 725:9176,
-       729:9884, 725:9219, 350:27470, 350:27628, 417:70227, 1012:22986)
-       ────────────────────────────────────────────────────────────── */
-
-    /* Required asterisk in field labels (Pampas/Light) */
-    .req-ast{color:#E28E5E;font-size:12px;font-weight:400;margin-left:2px}
-
-    /* Segmented pill — arctic-bordered, solid arctic on selected (Figma 274:25513) */
-    .seg-pill-v2{display:inline-flex;border:1px solid var(--arctic-primary);border-radius:var(--r-lg);overflow:hidden;line-height:0}
-    .seg-pill-v2 button{font-family:var(--font);background:var(--pale-primary);border:none;border-left:1px solid var(--kit-lighter);color:var(--kit-primary);font-size:16px;font-weight:700;line-height:24px;height:36px;padding:0 12px;cursor:pointer;transition:background .12s,color .12s,box-shadow .12s}
-    .seg-pill-v2 button:first-child{border-left:none}
-    .seg-pill-v2 button.on{background:var(--arctic-primary);color:#fff;box-shadow:0 1px 10px rgba(37,35,96,.20),0 2px 4px rgba(37,35,96,.14),0 1px 6px rgba(37,35,96,.12)}
-    .seg-pill-v2 button:not(.on):hover{background:var(--cape-lighter)}
-
-    /* Pricing mode tabs — same pill style (Figma 725:9176) */
-    .price-mode-pill{display:inline-flex;border:1px solid var(--arctic-primary);border-radius:var(--r-lg);overflow:hidden;margin-bottom:16px;line-height:0}
-    .price-mode-pill button{font-family:var(--font);background:var(--pale-primary);border:none;border-left:1px solid var(--kit-lighter);color:var(--kit-primary);font-size:16px;font-weight:700;line-height:24px;height:36px;padding:0 12px;cursor:pointer;transition:background .12s,color .12s,box-shadow .12s}
-    .price-mode-pill button:first-child{border-left:none}
-    .price-mode-pill button.on{background:var(--arctic-primary);color:#fff;box-shadow:0 1px 10px rgba(37,35,96,.20),0 2px 4px rgba(37,35,96,.14),0 1px 6px rgba(37,35,96,.12)}
-    .price-mode-pill button:not(.on):hover{background:var(--cape-lighter)}
-
-    /* Image uploader — picture-card style (Figma 274:25507) */
-    .upl-well{display:flex;align-items:center;gap:32px;background:var(--cape-lighter);border-radius:var(--r-lg);padding:16px 32px;min-height:136px}
-    .upl-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:102px;height:102px;border:1px dashed var(--kit-light);border-radius:var(--r-lg);background:var(--cape-light);font-family:var(--font);color:var(--kit-primary);font-size:14px;font-weight:700;line-height:20px;cursor:pointer;transition:border-color .12s,background .12s;flex-shrink:0}
-    .upl-card:hover{border-color:var(--arctic-primary);background:#FFF}
-    .upl-card .upl-plus{width:24px;height:24px;display:flex;align-items:center;justify-content:center}
-    .upl-thumb{width:102px;height:102px;border-radius:var(--r-lg);background-size:cover;background-position:center;background-color:var(--cape-primary);position:relative;flex-shrink:0;cursor:pointer}
-    .upl-thumb-rm{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(25,28,35,.7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;cursor:pointer;border:none}
-    .upl-hint{font-family:var(--font);color:var(--kit-light);font-size:16px;line-height:24px;font-weight:400}
-
-    /* V2 colour selector — show square swatch matching Figma 284:27142 */
-    .v2-colour-sel{position:relative;display:flex;align-items:center;gap:8px;border:1px solid var(--cape-dark);border-radius:var(--r-lg);padding:6px 36px 6px 12px;height:36px;cursor:pointer;background:var(--pale-primary);overflow:hidden}
-    .v2-colour-sel:focus-within{border-color:var(--arctic-primary)}
-    .v2-colour-swatch{width:24px;height:24px;border-radius:var(--r-sm);flex-shrink:0}
-    .v2-colour-name{font-family:var(--font);font-size:16px;font-weight:400;color:var(--kit-primary);line-height:24px}
-    .v2-colour-sel select{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;font-family:var(--font)}
-    .v2-colour-sel .colour-chev{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--kit-light)}
-
-    /* Drop-in / Membership pricing row (Figma 725:9176, 729:9884) */
-    .v2-price-row{display:flex;align-items:center;gap:8px;width:100%}
-    .v2-price-toggle-wrap{display:flex;align-items:center;gap:8px;padding:6px 16px 6px 12px;border-radius:var(--r-lg);flex:1;min-width:0}
-    .v2-price-toggle-wrap .price-label{font-family:var(--font);font-size:16px;line-height:24px;color:var(--kit-primary)}
-    .v2-price-toggle-wrap .price-label-bold{font-weight:700}
-    .v2-price-amount{width:110px;flex-shrink:0;display:flex;align-items:center;gap:8px;height:36px;background:var(--pale-primary);border:1px solid var(--cape-dark);border-radius:var(--r-lg);padding:0 12px}
-    .v2-price-amount.disabled{background:var(--cape-light);opacity:.55}
-    .v2-price-amount .prefix{font-family:var(--font);font-weight:700;font-size:16px;line-height:24px;color:var(--kit-primary)}
-    .v2-price-amount input{flex:1;min-width:0;border:none;outline:none;background:none;font-family:var(--font);font-size:16px;line-height:24px;color:var(--kit-primary)}
-    .v2-price-amount input::placeholder{color:var(--kit-light)}
-    .v2-price-suffix{font-family:var(--font);font-size:16px;line-height:24px;color:var(--kit-primary);flex-shrink:0}
-
-    /* Scroll container for the Different prices membership list */
-    .v2-price-scroll{max-height:335px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px;margin:0 -4px 0 0}
-
-    /* Schedules card (Figma 725:9219) — empty list well */
-    .sch-card-sub{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
-    .sch-card-sub-text{font-family:var(--font);font-size:16px;line-height:24px;color:var(--kit-primary);font-weight:400}
-    .sch-open-cal-btn{display:flex;align-items:center;gap:4px;height:36px;padding:0 12px;border:none;background:none;color:var(--arctic-primary);font-family:var(--font);font-size:16px;font-weight:700;line-height:24px;cursor:pointer;border-radius:var(--r-lg);transition:background .12s}
-    .sch-open-cal-btn:hover{background:var(--arctic-lightest)}
-    .sch-open-cal-btn svg{width:18px;height:18px}
-    .sch-well{background:var(--cape-lighter);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:6px}
-    .sch-well-title{font-family:var(--font);font-size:16px;line-height:24px;font-weight:700;color:#000}
-    .sch-well-meta{font-family:var(--font);font-size:14px;line-height:20px;color:#000;font-weight:400}
-    .sch-well-times{font-family:var(--font);font-size:14px;line-height:20px;color:#000;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .sch-empty{text-align:center;color:var(--kit-lighter);font-size:14px;padding:18px 0}
-
-    /* Day selector (Figma 417:70227) — outlined cards */
-    .day-row{display:flex;gap:8px;flex-wrap:wrap}
-    .day-card{width:50px;height:49px;border-radius:var(--r-lg);background:var(--pale-primary);border:1px solid var(--kit-light);display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:16px;font-weight:700;line-height:24px;color:var(--kit-primary);cursor:pointer;transition:all .12s;user-select:none}
-    .day-card:hover{border-color:var(--arctic-light)}
-    .day-card.on{background:var(--arctic-lightest);border-color:var(--arctic-light);color:var(--arctic-primary)}
-
-    /* Single class scheduling card (Figma 350:27470) — time range input */
-    .v2-time-range{display:flex;align-items:center;gap:8px;height:36px;background:var(--pale-primary);border:1px solid var(--cape-dark);border-radius:var(--r-lg);padding:0 12px;width:100%}
-    .v2-time-range .tr-half{flex:1;min-width:0;display:flex;align-items:center}
-    .v2-time-range .tr-half input{width:100%;border:none;outline:none;background:none;font-family:var(--font);font-size:16px;line-height:24px;color:var(--kit-primary)}
-    .v2-time-range .tr-half input::placeholder{color:var(--kit-light)}
-    .v2-time-range .tr-arrow{color:var(--kit-light);flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
-    .v2-time-range .tr-clock{color:var(--kit-light);flex-shrink:0;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
-
-    /* Date input row for recurring (Start date — to — End date — checkbox) */
-    .v2-date-inline-row{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
-    .v2-date-inline-row .date-to{font-family:var(--font);font-size:16px;line-height:24px;color:var(--kit-light);padding-bottom:8px}
-    .v2-date-inline-row .v2-no-end{display:flex;align-items:center;gap:8px;padding:6px 16px 6px 12px;border-radius:var(--r-lg);height:36px;cursor:pointer;user-select:none}
-    .v2-date-inline-row .v2-no-end .chk-box{width:24px;height:24px;border-radius:var(--r-sm);border:2px solid var(--kit-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--pale-primary)}
-    .v2-date-inline-row .v2-no-end .chk-box.on{background:var(--arctic-primary);border-color:var(--arctic-primary);color:#fff}
-    .v2-date-inline-row .v2-no-end .chk-box.on svg{stroke:#fff}
-    .v2-date-inline-row .v2-no-end .chk-lbl{font-family:var(--font);font-size:16px;line-height:24px;font-weight:700;color:var(--kit-primary)}
-
-    /* Private toggle row (Figma 1012:22986) */
-    .v2-priv-row{display:flex;gap:8px;padding:6px 16px 6px 12px;border-radius:var(--r-lg);align-items:flex-start}
-    .v2-priv-text{font-family:var(--font);font-size:16px;line-height:24px;color:var(--kit-primary)}
-    .v2-priv-text .priv-title{font-weight:700;display:block}
-    .v2-priv-text .priv-desc{font-weight:400}
-
-    /* Unsaved-changes confirmation modal (reuses .modal-overlay scaffolding) */
-    .unsaved-modal{max-width:440px;padding:24px}
-    .unsaved-modal h2{font-family:var(--font);font-size:20px;line-height:28px;font-weight:700;color:var(--kit-primary);margin-bottom:8px}
-    .unsaved-modal p{font-family:var(--font);font-size:14px;line-height:20px;color:var(--kit-light);margin-bottom:20px}
-    .unsaved-modal .modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:0}
-
-    /* Pricing card max-height + internal scroll */
-    .pricing-card-v2{max-height:680px;display:flex;flex-direction:column;overflow:hidden}
-    .pricing-card-v2 .pricing-fixed{flex-shrink:0}
-    .pricing-card-v2 .pricing-scroll{flex:1;overflow-y:auto;margin:0 -8px 0 0;padding-right:8px}
   </style>
 </head>
 <body>
@@ -736,47 +650,29 @@ const SAMPLE_CLASSES = [
 ];
 
 const COLOUR_OPTS = [
-  {name:'Default',      hex:'#12BEC0'},
-  {name:'Burnt orange', hex:'#D4820D'},
-  {name:'Hot pink',     hex:'#E8476A'},
-  {name:'Green',        hex:'#5BAD3E'},
-  {name:'Coral',        hex:'#D9552B'},
-  {name:'Purple',       hex:'#7B56C2'},
+  {name:'Teal',    hex:'#0D9488'},{name:'Indigo',  hex:'#4B46C1'},{name:'Blue',    hex:'#2563EB'},
+  {name:'Purple',  hex:'#7C3AED'},{name:'Green',   hex:'#059669'},{name:'Emerald', hex:'#008545'},
+  {name:'Orange',  hex:'#DD7B42'},{name:'Red',     hex:'#DE233C'},{name:'Pink',    hex:'#DB2777'},
+  {name:'Navy',    hex:'#0079C4'},{name:'Amber',   hex:'#B45309'},{name:'Slate',   hex:'#6B7280'},
 ];
-
-const MEMBERSHIPS = [
-  '10 Class Pack',
-  'Unlimited Monthly',
-  'Premium Annual',
-  'Student Pass',
-  'Corporate Wellness',
-  'Drop-in Pack',
-  'Family Plan',
-  'Weekend Warrior',
-  'Founders Lifetime',
-  'Senior Citizen',
-];
-
-const TAXES_LIST  = ['VAT 23%', 'VAT 13.5%', 'VAT 9%', 'No tax', 'Custom rate'];
-const ROOM_LAYOUTS= ['Standard', 'Theatre', 'Classroom', 'Horseshoe', 'Cabaret'];
 
 const CLASS_TEMPLATES = {
-  'Hyrox 45':      {trainer:'Joe Soap',     isSub:false, classType:'Onsite', category:'HIIT',               facility:'Gym Floor',     classSize:'16', level:'Intermediate', colour:'#12BEC0'},
-  'Yoga Flow':     {trainer:'Sarah Chen',   isSub:false, classType:'Onsite', category:'Yoga',               facility:'Golf simulator', classSize:'12', level:'All levels',   colour:'#E8476A'},
-  'HIIT Training': {trainer:'Alex Trainer', isSub:false, classType:'Onsite', category:'HIIT',               facility:'Main Studio',   classSize:'10', level:'Intermediate', colour:'#7B56C2'},
-  'HIIT Blast':    {trainer:'Alex Trainer', isSub:true,  classType:'Onsite', category:'HIIT',               facility:'Main Studio',   classSize:'10', level:'Intermediate', colour:'#7B56C2'},
-  'Abs and Core':  {trainer:'Conner Behan', isSub:false, classType:'Onsite', category:'Strength Training',  facility:'Main Studio',   classSize:'12', level:'All levels',   colour:'#12BEC0'},
-  'Spin Class':    {trainer:'John Smith',   isSub:false, classType:'Onsite', category:'Cycling',            facility:'Spin Room',     classSize:'15', level:'All levels',   colour:'#7B56C2'},
-  'Pilates Core':  {trainer:'Emma Davis',   isSub:false, classType:'Onsite', category:'Pilates',            facility:'Main Studio',   classSize:'10', level:'Beginner',     colour:'#7B56C2'},
-  'JD Recurring':  {trainer:'John Smith',   isSub:false, classType:'Onsite', category:'HIIT',               facility:'Gym Floor',     classSize:'10', level:'All levels',   colour:'#7B56C2'},
-  'CrossFit WOD':  {trainer:'David Brown',  isSub:false, classType:'Onsite', category:'Strength Training',  facility:'Outdoor Area',  classSize:'6',  level:'Advanced',     colour:'#12BEC0'},
-  'Gympass WOD':   {trainer:'Conner Behan', isSub:false, classType:'Onsite', category:'HIIT',               facility:'Main Studio',   classSize:'10', level:'All levels',   colour:'#5BAD3E'},
-  'Pilates':       {trainer:'Emma Davis',   isSub:false, classType:'Onsite', category:'Pilates',            facility:'Main Studio',   classSize:'10', level:'Beginner',     colour:'#5BAD3E'},
-  'Yoga Yin':      {trainer:'Sarah Chen',   isSub:false, classType:'Onsite', category:'Yoga',               facility:'Golf simulator', classSize:'10', level:'All levels',   colour:'#5BAD3E'},
-  'Badminton':     {trainer:'Emma Davis',   isSub:false, classType:'Onsite', category:'Cardio',             facility:'Outdoor Area',  classSize:'8',  level:'All levels',   colour:'#5BAD3E'},
-  'Mid Morning':   {trainer:'Conner Behan', isSub:false, classType:'Onsite', category:'Wellness',           facility:'Main Studio',   classSize:'12', level:'All levels',   colour:'#12BEC0'},
-  'Boxing':        {trainer:'Mike Johnson', isSub:false, classType:'Onsite', category:'Boxing',             facility:'Boxing Gym',    classSize:'8',  level:'Beginner',     colour:'#7B56C2'},
-  'Boxing Fundamentals':{trainer:'Mike Johnson',isSub:false,classType:'Onsite',category:'Boxing',           facility:'Boxing Gym',    classSize:'8',  level:'Beginner',     colour:'#D9552B'},
+  'Hyrox 45':      {trainer:'Joe Soap',     isSub:false, classType:'Onsite', category:'HIIT',               facility:'Gym Floor',     classSize:'16', level:'Intermediate', colour:'#0D9488'},
+  'Yoga Flow':     {trainer:'Sarah Chen',   isSub:false, classType:'Onsite', category:'Yoga',               facility:'Golf simulator', classSize:'12', level:'All levels',   colour:'#DB2777'},
+  'HIIT Training': {trainer:'Alex Trainer', isSub:false, classType:'Onsite', category:'HIIT',               facility:'Main Studio',   classSize:'10', level:'Intermediate', colour:'#7C3AED'},
+  'HIIT Blast':    {trainer:'Alex Trainer', isSub:true,  classType:'Onsite', category:'HIIT',               facility:'Main Studio',   classSize:'10', level:'Intermediate', colour:'#7C3AED'},
+  'Abs and Core':  {trainer:'Conner Behan', isSub:false, classType:'Onsite', category:'Strength Training',  facility:'Main Studio',   classSize:'12', level:'All levels',   colour:'#0D9488'},
+  'Spin Class':    {trainer:'John Smith',   isSub:false, classType:'Onsite', category:'Cycling',            facility:'Spin Room',     classSize:'15', level:'All levels',   colour:'#2563EB'},
+  'Pilates Core':  {trainer:'Emma Davis',   isSub:false, classType:'Onsite', category:'Pilates',            facility:'Main Studio',   classSize:'10', level:'Beginner',     colour:'#7C3AED'},
+  'JD Recurring':  {trainer:'John Smith',   isSub:false, classType:'Onsite', category:'HIIT',               facility:'Gym Floor',     classSize:'10', level:'All levels',   colour:'#2563EB'},
+  'CrossFit WOD':  {trainer:'David Brown',  isSub:false, classType:'Onsite', category:'Strength Training',  facility:'Outdoor Area',  classSize:'6',  level:'Advanced',     colour:'#0D9488'},
+  'Gympass WOD':   {trainer:'Conner Behan', isSub:false, classType:'Onsite', category:'HIIT',               facility:'Main Studio',   classSize:'10', level:'All levels',   colour:'#059669'},
+  'Pilates':       {trainer:'Emma Davis',   isSub:false, classType:'Onsite', category:'Pilates',            facility:'Main Studio',   classSize:'10', level:'Beginner',     colour:'#059669'},
+  'Yoga Yin':      {trainer:'Sarah Chen',   isSub:false, classType:'Onsite', category:'Yoga',               facility:'Golf simulator', classSize:'10', level:'All levels',   colour:'#059669'},
+  'Badminton':     {trainer:'Emma Davis',   isSub:false, classType:'Onsite', category:'Cardio',             facility:'Outdoor Area',  classSize:'8',  level:'All levels',   colour:'#059669'},
+  'Mid Morning':   {trainer:'Conner Behan', isSub:false, classType:'Onsite', category:'Wellness',           facility:'Main Studio',   classSize:'12', level:'All levels',   colour:'#0D9488'},
+  'Boxing':        {trainer:'Mike Johnson', isSub:false, classType:'Onsite', category:'Boxing',             facility:'Boxing Gym',    classSize:'8',  level:'Beginner',     colour:'#2563EB'},
+  'Boxing Fundamentals':{trainer:'Mike Johnson',isSub:false,classType:'Onsite',category:'Boxing',           facility:'Boxing Gym',    classSize:'8',  level:'Beginner',     colour:'#DD7B42'},
 };
 
 const CLASS_SCHEDULE_DATA = {
@@ -847,9 +743,6 @@ const I = {
   home:     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 7l6-5 6 5v7H2V7z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/><path d="M6 14v-4h4v4" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg>,
   clipCopy: <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="3.5" y="3.5" width="7" height="8" rx="1" stroke="currentColor" strokeWidth="1.3"/><path d="M2 9.5V3A1 1 0 0 1 3 2h5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>,
   arrow:    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3l4 3.5-4 3.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  openExt:  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 2.5h4.5V7M15.5 2.5l-7 7M7 4H4a1.5 1.5 0 0 0-1.5 1.5V14A1.5 1.5 0 0 0 4 15.5h8.5A1.5 1.5 0 0 0 14 14v-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  clock18:  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.75" stroke="currentColor" strokeWidth="1.5"/><path d="M9 5.25V9l2.25 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  arrR:     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M14 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>,
 };
 
 // ─── Small UI Components ──────────────────────────────────────────
@@ -887,6 +780,92 @@ function Sel({ value, onChange, opts, placeholder, disabled }) {
     </div>
   );
 }
+/* ════════════════════════════════════════════════════════════════════════════
+ * DESIGN SYSTEM MAPPING
+ * ════════════════════════════════════════════════════════════════════════════
+ * This prototype is styled to visually match Glofox's `@glofoxinc/react-components`
+ * Storybook (https://glofoxinc.github.io/react-components/). Because the package
+ * is private and this is a single-file CDN prototype, we cannot `import` the
+ * real components — but every UI element here has a documented mapping so the
+ * production implementation can replace these custom components 1:1.
+ *
+ * Conventions for developers reviewing the code:
+ *
+ *   1. DS_MAP (below) is the single source of truth. Each entry has:
+ *        name:    DS component name as used in the codebase
+ *        path:    Storybook taxonomy path
+ *        story:   direct link to the Storybook story
+ *        notes:   props / variant used in this prototype
+ *
+ *   2. Every DS-mapped element has a sibling <DSTag name="..."/> next to its
+ *      label. DSTag looks up the name in DS_MAP and renders a clickable badge
+ *      (visible only when "Show design system mapping" is on in Field Settings,
+ *      V2 mode). Clicking the badge opens the live Storybook story in a new tab.
+ *
+ *   3. To find every DS-mapped element in the source, grep for <DSTag.
+ *
+ *   4. To migrate to the real DS, replace each prototype primitive (Sel, MultiSel,
+ *      Toggle, Checkbox, Radio, `.f-input`, `.card`, .btn-save, etc.) with the
+ *      DS component named in its DSTag.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+const DS_BASE = 'https://glofoxinc.github.io/react-components/?path=/story/';
+const DS_MAP = {
+  // Layout / containers
+  'Drawer':                      { path: 'Atoms/Drawer',                              story: 'components-atoms-drawer--playground',                       notes: 'size="medium"' },
+  'CardV3':                      { path: 'Atoms/Card',                                story: 'components-atoms-cardv3--playground',                       notes: 'default elevation' },
+  'Divider':                     { path: 'Atoms/Divider',                             story: 'components-atoms-divider--playground' },
+
+  // Form controls
+  'TextFieldV3':                 { path: 'Atoms/FormControls/TextField',              story: 'components-atoms-formcontrols-textfieldv3--playground' },
+  'TextFieldV3 prefix="€"':      { path: 'Atoms/FormControls/TextField',              story: 'components-atoms-formcontrols-textfieldv3--with-prefix',    notes: 'prefix slot' },
+  'TextArea':                    { path: 'Atoms/FormControls/TextField/TextArea',     story: 'components-atoms-formcontrols-textarea--playground' },
+  'SelectV3':                    { path: 'Atoms/FormControls/Select',                 story: 'components-atoms-formcontrols-selectv3--playground' },
+  'SelectV3 (disabled)':         { path: 'Atoms/FormControls/Select',                 story: 'components-atoms-formcontrols-selectv3--disabled' },
+  'SelectV3 mode="multiple"':    { path: 'Atoms/FormControls/Select',                 story: 'components-atoms-formcontrols-selectv3--multiple',          notes: 'mode="multiple", chip display' },
+  'Radio.Group buttonStyle="solid"':            { path: 'Atoms/FormControls/Radio',   story: 'components-atoms-formcontrols-radio--button-solid' },
+  'Radio.Group buttonStyle="solid" (3 options)':{ path: 'Atoms/FormControls/Radio',   story: 'components-atoms-formcontrols-radio--button-solid' },
+  'Checkbox':                    { path: 'Atoms/FormControls/Checkbox',               story: 'components-atoms-formcontrols-checkbox--playground' },
+  'Checkbox.Group buttonStyle="solid"':         { path: 'Atoms/FormControls/Checkbox',story: 'components-atoms-formcontrols-checkbox--button-solid' },
+  'Switch':                      { path: 'Atoms/FormControls/Switch',                 story: 'components-atoms-formcontrols-switch--playground' },
+  'InputNumber':                 { path: 'Atoms/FormControls/InputNumber',            story: 'components-atoms-formcontrols-inputnumber--playground' },
+  'InputNumber + SelectV3':      { path: 'Atoms/FormControls/InputNumber',            story: 'components-atoms-formcontrols-inputnumber--with-addon',      notes: 'addonAfter={<Select/>}' },
+  'DatePicker':                  { path: 'Atoms/FormControls/DatePicker',             story: 'components-atoms-formcontrols-datepicker--playground' },
+  'TimePicker':                  { path: 'Atoms/FormControls/TimePicker',             story: 'components-atoms-formcontrols-timepicker--playground' },
+  'TimePicker (range)':          { path: 'Atoms/FormControls/TimePicker',             story: 'components-atoms-formcontrols-timepicker--range',           notes: 'TimePicker.RangePicker' },
+  'Uploader + ImageCrop':        { path: 'Atoms/FormControls/Uploader',               story: 'components-atoms-formcontrols-uploader--with-crop',          notes: 'Uploader · Atoms/ImageCrop' },
+
+  // Buttons
+  'ButtonV3':                    { path: 'Atoms/Buttons/Button',                      story: 'components-atoms-buttons-buttonv3--playground' },
+  'ButtonV3 (link variant)':     { path: 'Atoms/Buttons/Button',                      story: 'components-atoms-buttons-buttonv3--link' },
+
+  // Typography helpers
+  'InputHint':                   { path: 'Atoms/Typography/Templates/InputHint',      story: 'components-atoms-typography-templates-inputhint--playground' },
+};
+const dsStoryUrl = (n) => (DS_MAP[n] && DS_MAP[n].story) ? (DS_BASE + DS_MAP[n].story) : null;
+
+// ─── DSTag — design system mapping annotation (V2 inspector) ─────
+// Renders as: (when show=true) a tiny clickable badge linking to the live
+// Storybook story. The JSX call itself ALWAYS remains in source, so even
+// when hidden in the UI a dev can grep for <DSTag in the file to find every
+// DS-mapped element. Stamps data-ds-name on the badge for DevTools inspection.
+function DSTag({ show, name, path, kind }) {
+  if (!show) return null;
+  const cls  = kind === 'card' ? 'ds-tag-card' : 'ds-tag';
+  const url  = dsStoryUrl(name);
+  const meta = DS_MAP[name];
+  const tip  = `${name}${meta?.path ? ' — '+meta.path : (path ? ' — '+path : '')}${meta?.notes ? '\n('+meta.notes+')' : ''}${url ? '\n\nOpen in Storybook ↗' : ''}`;
+  if (url) {
+    return (
+      <a href={url} target="_blank" rel="noopener noreferrer"
+         className={cls} data-ds-name={name} title={tip}
+         onClick={e=>e.stopPropagation()}>
+        {name}
+      </a>
+    );
+  }
+  return <span className={cls} data-ds-name={name} title={tip}>{name}</span>;
+}
+
 // ─── MultiSel — multi-select with chips ──────────────────────────
 function MultiSel({ value, onChange, opts, placeholder }) {
   const [open, setOpen] = useState(false);
@@ -1193,36 +1172,16 @@ function ColourSel({ value, onChange }) {
   );
 }
 
-// ─── V2 Colour Selector — square swatches matching Figma 284:27142 ─
-function V2ColourSel({ value, onChange }) {
-  const opt = COLOUR_OPTS.find(c => c.hex === value) || COLOUR_OPTS[0];
-  return (
-    <div className="v2-colour-sel">
-      <div className="v2-colour-swatch" style={{background: opt.hex}}/>
-      <span className="v2-colour-name">{opt.name}</span>
-      <select value={value} onChange={e => onChange(e.target.value)}>
-        {COLOUR_OPTS.map(c => <option key={c.hex} value={c.hex}>{c.name}</option>)}
-      </select>
-      <span className="colour-chev">{I.chevD}</span>
-    </div>
-  );
-}
-
 // ─── Class Drawer (Create + Edit) ────────────────────────────────
-function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templates, version='v1', initialSlot=null }) {
+function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templates, version='v1', showDsMap=false }) {
   const isV2 = version === 'v2';
+  const dsOn = isV2 && showDsMap;
   const isEdit    = mode === 'editSingle' || mode === 'editRecurring';
   const isRecEdit = mode === 'editRecurring';
   // Look up template data for pre-population (use live templateData if provided, fall back to static)
   const tplMap = templates || CLASS_TEMPLATES;
   const tpl  = isEdit    ? (tplMap[event?.t]             || {}) : {};
   const schd = isRecEdit ? (CLASS_SCHEDULE_DATA[event?.t] || {}) : {};
-
-  // Derive ISO date + time strings from a clicked calendar slot
-  // (assumes the demo's fixed week: March 2026)
-  const slotDateISO = initialSlot ? `2026-03-${String(WEEK_DATES[initialSlot.di]||21).padStart(2,'0')}` : '';
-  const slotStart   = initialSlot ? `${String(initialSlot.hv).padStart(2,'0')}:00` : '';
-  const slotEnd     = initialSlot ? `${String((initialSlot.hv||10)+1).padStart(2,'0')}:00` : '';
 
   const [classType,  setClassType]  = useState('single'); // only used in create mode
 
@@ -1237,33 +1196,11 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
   const [classSize,  setClassSize]  = useState(isEdit ? String(tpl.classSize||'') : '');
   const [level,      setLevel]      = useState(isEdit ? tpl.level||'All levels' : 'All levels');
 
-  // Single scheduling — editSingle always shows date + time. In create mode,
-  // pre-populate from the clicked calendar slot if provided.
+  // Single scheduling — editSingle always shows date + time
   const evH = event?.h || 10;
-  const [singleDate, setSingleDate] = useState(isEdit ? '2026-08-21' : slotDateISO);
-  const [singleStart,setSingleStart]= useState(isEdit ? `${String(evH).padStart(2,'0')}:00` : slotStart);
-  const [singleEnd,  setSingleEnd]  = useState(isEdit ? `${String(evH+1).padStart(2,'0')}:00` : slotEnd);
-
-  // V2 — Private toggle (shown last in every create-mode scenario)
-  const [privSched, setPrivSched]   = useState(false);
-
-  // Switching schedule type: persist the slot's date/time on Single → Recurring
-  // (carry the date over as the recurring start date), and clear it for
-  // Date specific (the user must add days from scratch).
-  const handleClassTypeChange = t => {
-    setClassType(t);
-    setIsDirty(true);
-    if (t === 'recurring') {
-      if (singleDate && !startDate) setStartDate(singleDate);
-    }
-    if (t === 'dateSpecific') {
-      setSingleDate('');
-      setSingleStart('');
-      setSingleEnd('');
-      setDsSelDates([]);
-      setDsEntries([]);
-    }
-  };
+  const [singleDate, setSingleDate] = useState(isEdit ? '2026-08-21' : '');
+  const [singleStart,setSingleStart]= useState(isEdit ? `${String(evH).padStart(2,'0')}:00` : '');
+  const [singleEnd,  setSingleEnd]  = useState(isEdit ? `${String(evH+1).padStart(2,'0')}:00` : '');
 
   // Recurring scheduling — pre-populated from CLASS_SCHEDULE_DATA
   const [startDate,  setStartDate]  = useState(isRecEdit ? schd.startDate||'2025-05-10' : '');
@@ -1369,7 +1306,7 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
         <div className="drawer-hdr">
           <button className="dr-fab" onClick={onClose}>{I.close}</button>
           <div className="dr-title-wrap">
-            <span className="dr-label">{headerLabel}<span className="ver-badge">{isV2?'V2':'V1'}</span></span>
+            <span className="dr-label">{headerLabel}<span className="ver-badge">{isV2?'V2':'V1'}</span><DSTag show={dsOn} kind="card" name="Drawer" path='size="medium" — Atoms/Drawer'/></span>
             <span className="dr-classname">{cls || (isEdit ? 'Edit class' : 'New class')}</span>
           </div>
           <div className="dr-actions">
@@ -1377,7 +1314,7 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
               <button className="btn-delete" onClick={()=>{onClose();onSave(cls,'delete');}}>Delete</button>
             )}
             <button className="btn-cancel" onClick={onClose}>Cancel</button>
-            
+            <DSTag show={dsOn} name="ButtonV3" path="Atoms/Buttons/Button"/>
             <button className="btn-save" disabled={saveDisabled} onClick={handleSave}>Save</button>
           </div>
         </div>
@@ -1386,18 +1323,19 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
 
           {/* ── Class details card ── */}
           <div className="card">
-            <div className="card-title">Class details</div>
+            <div className="card-title">Class details<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
 
             {/* Schedule type tabs — create mode only */}
             {!isEdit && (
               isV2 ? (
-                <div style={{marginBottom:16}}>
-                  <div className="seg-pill-v2">
+                <>
+                  <div className="seg-tabs-v2">
                     {[['single','Single class'],['recurring','Recurring schedule'],['dateSpecific','Date specific']].map(([t,l])=>(
-                      <button key={t} className={classType===t?'on':''} onClick={()=>handleClassTypeChange(t)}>{l}</button>
+                      <button key={t} className={`seg-tab-v2 ${classType===t?'active':''}`} onClick={()=>setClassType(t)}>{l}</button>
                     ))}
                   </div>
-                </div>
+                  {dsOn && <div style={{marginTop:-10,marginBottom:14}}><DSTag show={dsOn} name='Radio.Group buttonStyle="solid"' path="Atoms/FormControls/Radio"/></div>}
+                </>
               ) : (
                 <div className="sched-tabs">
                   {[['single','Single class'],['recurring','Recurring schedule'],['dateSpecific','Date specific']].map(([t,l])=>(
@@ -1409,20 +1347,20 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
 
             {/* Class */}
             <div className="f-group">
-              <label className="f-label">Class<span className="req">*</span></label>
+              <label className="f-label">Class<span className="req">*</span><DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
               <Sel value={cls} onChange={v=>{setCls(v);setIsDirty(true);}} opts={CLASSES_LIST} placeholder="Select class"/>
             </div>
 
             {/* Trainer + inline substitute checkbox */}
             <div className="f-group" style={{marginBottom: (isEdit || isV2) ? 14 : 0}}>
-              <label className="f-label">Trainer<span className="req">*</span></label>
+              <label className="f-label">Trainer<span className="req">*</span><DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
               <div className="trainer-row">
                 <Sel value={trainer} onChange={v=>{setTrainer(v);setIsSub(false);setIsDirty(true);}} opts={TRAINERS_LIST} placeholder="Select trainer"/>
                 {trainer && (
                   <div className="sub-inline" onClick={()=>{setIsSub(v=>!v);setIsDirty(true);}}>
                     <div className={`sub-chk-box ${isSub?'on':''}`}>{isSub && I.check}</div>
                     <span className="sub-chk-lbl">Mark trainer as substitute</span>
-                    
+                    <DSTag show={dsOn} name="Checkbox" path="Atoms/FormControls/Checkbox"/>
                   </div>
                 )}
               </div>
@@ -1432,11 +1370,11 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
             {isV2 && (
               <>
                 <div className="f-group">
-                  <label className="f-label">Facility<span className="req">*</span></label>
+                  <label className="f-label">Facility<span className="req">*</span><DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
                   <Sel value={facility} onChange={v=>{setFacility(v);setIsDirty(true);}} opts={FACILITIES_LIST} placeholder="Select"/>
                 </div>
                 <div className="f-group" style={{marginBottom:0}}>
-                  <label className="f-label">Level<span className="req">*</span></label>
+                  <label className="f-label">Level<span className="req">*</span><DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
                   <Sel value={level} onChange={v=>{setLevel(v);setIsDirty(true);}} opts={LEVEL_OPTS} placeholder="Select"/>
                 </div>
               </>
@@ -1479,20 +1417,20 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
             {/* ── CREATE MODE: show tabs + content per classType ── */}
             {mode === 'create' && (
               <>
-                {classType !== 'dateSpecific' && <div className="card-title">Class scheduling</div>}
+                {classType !== 'dateSpecific' && <div className="card-title">Class scheduling<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>}
 
                 {classType === 'single' && (
                   <>
                     <div className="f-group">
-                      <label className="f-label">Date<span className="req">*</span></label>
+                      <label className="f-label">Date<span className="req">*</span><DSTag show={dsOn} name="DatePicker" path="Atoms/FormControls/DatePicker"/></label>
                       <DateIn value={singleDate} onChange={v=>{setSingleDate(v);setIsDirty(true);}}/>
                     </div>
                     <div className="f-group" style={{marginBottom:0}}>
-                      <label className="f-label">Class time<span className="req">*</span></label>
+                      <label className="f-label">Class time<DSTag show={dsOn} name="TimePicker (range)" path="Atoms/FormControls/TimePicker"/></label>
                       <div className="t-row">
-                        <TimePicker value={singleStart} onChange={v=>{setSingleStart(v);setIsDirty(true);}} placeholder="Start time"/>
+                        <TimePicker value={singleStart} onChange={v=>{setSingleStart(v);setIsDirty(true);}} placeholder="Start"/>
                         <span className="t-arr">→</span>
-                        <TimePicker value={singleEnd}   onChange={v=>{setSingleEnd(v);setIsDirty(true);}}   placeholder="End time"/>
+                        <TimePicker value={singleEnd}   onChange={v=>{setSingleEnd(v);setIsDirty(true);}}   placeholder="End"/>
                       </div>
                     </div>
                   </>
@@ -1503,12 +1441,12 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                     <div className="f-group">
                       <div className="date-row-wrap">
                         <div className="date-col">
-                          <label className="f-label" style={{marginBottom:0}}>Start date</label>
+                          <label className="f-label" style={{marginBottom:0}}>Start date<DSTag show={dsOn} name="DatePicker" path="Atoms/FormControls/DatePicker"/></label>
                           <DateIn value={startDate} onChange={v=>{setStartDate(v);setIsDirty(true);}}/>
                         </div>
                         <span className="date-sep-mid">to</span>
                         <div className="date-col">
-                          <label className="f-label" style={{marginBottom:0}}>End date</label>
+                          <label className="f-label" style={{marginBottom:0}}>End date<DSTag show={dsOn} name="DatePicker" path="Atoms/FormControls/DatePicker"/></label>
                           <DateIn value={endDate} onChange={v=>{setEndDate(v);setIsDirty(true);}} disabled={noEnd}/>
                         </div>
                         <div className="no-end-row" style={{paddingBottom:6}} onClick={()=>{setNoEnd(v=>!v);setIsDirty(true);}}>
@@ -1516,16 +1454,16 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                             {noEnd && I.check}
                           </div>
                           <span style={{fontSize:13,fontWeight:600,color:'var(--kit-primary)'}}>No end date</span>
-                          
+                          <DSTag show={dsOn} name="Checkbox" path="Atoms/FormControls/Checkbox"/>
                         </div>
                       </div>
                     </div>
                     <div className="f-group">
-                      <label className="f-label">Frequency</label>
+                      <label className="f-label">Frequency<DSTag show={dsOn} name="SelectV3 (disabled)" path="Atoms/FormControls/Select"/></label>
                       <div className="freq-locked"><span>Custom</span><span style={{opacity:.5}}>{I.chevD}</span></div>
                     </div>
                     <div className="f-group">
-                      <label className="f-label">Repeats every</label>
+                      <label className="f-label">Repeats every<DSTag show={dsOn} name="InputNumber + SelectV3" path="Atoms/FormControls/InputNumber · Atoms/FormControls/Select"/></label>
                       <div className="every-row">
                         <input type="number" className="every-num" min="1" max="99" value={every} onChange={e=>{setEvery(Math.max(1,Number(e.target.value)));setIsDirty(true);}}/>
                         <Sel value={unit} onChange={v=>{setUnit(v);setIsDirty(true);}} opts={UNIT_OPTS}/>
@@ -1534,22 +1472,12 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                     {isWeek && (
                       <>
                         <div className="f-group">
-                          {isV2 ? (
-                            <div className="day-row">
-                              {DAY_BTNS.map(d=>(
-                                <div key={d} className={`day-card ${selDays.includes(d)?'on':''}`} onClick={()=>toggleDay(d)}>{({Sun:'Sun',Mon:'Mon',Tue:'Tues',Wed:'Wed',Thu:'Thur',Fri:'Fri',Sat:'Sat'})[d]}</div>
-                              ))}
-                            </div>
-                          ) : (
-                            <>
-                              <label className="f-label">Days</label>
-                              <div className="day-sel">
-                                {DAY_BTNS.map(d=>(
-                                  <button key={d} className={`day-btn ${selDays.includes(d)?'on':''}`} onClick={()=>toggleDay(d)}>{d}</button>
-                                ))}
-                              </div>
-                            </>
-                          )}
+                          <label className="f-label">Days<DSTag show={dsOn} name='Checkbox.Group buttonStyle="solid"' path="Atoms/FormControls/Checkbox"/></label>
+                          <div className="day-sel">
+                            {DAY_BTNS.map(d=>(
+                              <button key={d} className={`day-btn ${selDays.includes(d)?'on':''}`} onClick={()=>toggleDay(d)}>{d}</button>
+                            ))}
+                          </div>
                         </div>
                         {orderedSelDays.length === 0 ? (
                           <div className="no-days-hint">Select days above to set class times</div>
@@ -1618,19 +1546,6 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                     )}
                   </>
                 )}
-
-                {/* ── V2 Private toggle — shown last on every schedule type (Figma 1012:22986) ── */}
-                {isV2 && (
-                  <div style={{marginTop:24,paddingTop:16,borderTop:'1px solid var(--cape-primary)'}}>
-                    <div className="v2-priv-row" onClick={()=>{setPrivSched(v=>!v);setIsDirty(true);}} style={{cursor:'pointer'}}>
-                      <Toggle checked={privSched} onChange={v=>{setPrivSched(v);setIsDirty(true);}}/>
-                      <div className="v2-priv-text">
-                        <span className="priv-title">Private</span>
-                        <span className="priv-desc">By enabling this setting you make this class hidden from the member app</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </>
             )}
 
@@ -1690,22 +1605,12 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                 {isWeek && (
                   <>
                     <div className="f-group">
-                      {isV2 ? (
-                        <div className="day-row">
-                          {DAY_BTNS.map(d=>(
-                            <div key={d} className={`day-card ${selDays.includes(d)?'on':''}`} onClick={()=>toggleDay(d)}>{({Sun:'Sun',Mon:'Mon',Tue:'Tues',Wed:'Wed',Thu:'Thur',Fri:'Fri',Sat:'Sat'})[d]}</div>
-                          ))}
-                        </div>
-                      ) : (
-                        <>
-                          <label className="f-label">Days</label>
-                          <div className="day-sel">
-                            {DAY_BTNS.map(d=>(
-                              <button key={d} className={`day-btn ${selDays.includes(d)?'on':''}`} onClick={()=>toggleDay(d)}>{d}</button>
-                            ))}
-                          </div>
-                        </>
-                      )}
+                      <label className="f-label">Days</label>
+                      <div className="day-sel">
+                        {DAY_BTNS.map(d=>(
+                          <button key={d} className={`day-btn ${selDays.includes(d)?'on':''}`} onClick={()=>toggleDay(d)}>{d}</button>
+                        ))}
+                      </div>
                     </div>
                     {orderedSelDays.length === 0 ? (
                       <div className="no-days-hint">Select days above to set class times</div>
@@ -1788,19 +1693,15 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
 }
 
 // ─── Class Definition Drawer (template) — Figma 85-11955 ─────────
-function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, classData, version='v1' }) {
+function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, classData, version='v1', showDsMap=false }) {
   const isV2 = version === 'v2';
+  const dsOn = isV2 && showDsMap;
   const tpl = classData ? (CLASS_TEMPLATES[classData.name] || {}) : {};
   const [name,        setName]        = useState(classData?.name || '');
   const [desc,        setDesc]        = useState(classData?.desc || '');
-  const [colour,      setColour]      = useState(tpl.colour || '#12BEC0');
+  const [colour,      setColour]      = useState(tpl.colour || COLOUR_OPTS[0].hex);
   const [classType,   setClassType]   = useState(tpl.classType || 'Onsite');
   const [category,    setCategory]    = useState(tpl.category || '');
-  const [categoryMulti,setCategoryMulti]= useState(()=>{
-    const c = tpl.category;
-    if (!c) return [];
-    return Array.isArray(c) ? c : [c];
-  });
   const [facility,    setFacility]    = useState(tpl.facility || '');
   const [trainers,    setTrainers]    = useState(()=>{
     const et = tpl.eligibleTrainers;
@@ -1809,41 +1710,24 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
   });
   const [classSize,   setClassSize]   = useState(tpl.classSize || '');
   const [level,       setLevel]       = useState(tpl.level || 'All levels');
-  const [imageUrl,    setImageUrl]    = useState(tpl.imageUrl || '');
   const [pricingTab,  setPricingTab]  = useState('single');
-  const [taxes,       setTaxes]       = useState([]);
-  const [spotBook,    setSpotBook]    = useState(false);
+  const [taxes,       setTaxes]       = useState('');
+  const [spotBook,    setSpotBook]    = useState(true);
   const [roomLayout,  setRoomLayout]  = useState('');
   // V2 — additional state
-  const [eligibleFacilities, setEligibleFacilities] = useState(()=>{
-    const ef = tpl.eligibleFacilities;
-    if (ef) return Array.isArray(ef) ? ef : [ef];
-    return tpl.facility ? [tpl.facility] : [];
-  });
+  const [eligibleFacilities, setEligibleFacilities] = useState(tpl.eligibleFacilities || []);
   const [classFormat,        setClassFormat]        = useState(tpl.classFormat || 'In person');
   const [glofoxBookings,     setGlofoxBookings]     = useState('Enabled');
   const [maxGlofox,          setMaxGlofox]          = useState('');
   const [gympassBookings,    setGympassBookings]    = useState('Enabled');
-  const [singlePrice,        setSinglePrice]        = useState('');
   const [dropInOn,           setDropInOn]           = useState(false);
   const [dropInPrice,        setDropInPrice]        = useState('');
-  const [clientsOn,          setClientsOn]          = useState(false);
-  const [clientsPrice,       setClientsPrice]       = useState('');
-  const [membershipPrices,   setMembershipPrices]   = useState(()=>
-    Object.fromEntries(MEMBERSHIPS.map(m=>[m,{on:false,price:''}])));
+  const [clientCancelOn,     setClientCancelOn]     = useState(false);
+  const [clientCancelFee,    setClientCancelFee]    = useState('');
   const [emailNotifs,        setEmailNotifs]        = useState(false);
   const [privateClass,       setPrivateClass]       = useState(false);
-  // Track dirty state for unsaved-changes confirmation modal
-  const [tplDirty,           setTplDirty]           = useState(false);
-  const [pendingNav,         setPendingNav]         = useState(null);
 
   if (!open) return null;
-  const isNewTpl = !classData;
-  const markDirty = () => setTplDirty(true);
-  const tryNavToCalendar = sched => {
-    if (tplDirty) { setPendingNav(sched); }
-    else { onGoToCalendar(sched); }
-  };
 
   return (
     <>
@@ -1852,25 +1736,16 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
         <div className="drawer-hdr">
           <button className="dr-fab" onClick={onClose}>{I.close}</button>
           <div className="dr-title-wrap">
-            <span className="dr-label">{classData ? 'Edit class template' : 'Create class template'}<span className="ver-badge">{isV2?'V2':'V1'}</span></span>
+            <span className="dr-label">{classData ? 'Edit class template' : 'Create class template'}<span className="ver-badge">{isV2?'V2':'V1'}</span><DSTag show={dsOn} kind="card" name="Drawer" path='size="medium" — Atoms/Drawer'/></span>
             <span className="dr-classname">{name||(classData ? 'Edit class' : 'New class')}</span>
           </div>
           <div className="dr-actions">
             <button className="btn-cancel" onClick={onClose}>Cancel</button>
-            
+            <DSTag show={dsOn} name="ButtonV3" path="Atoms/Buttons/Button"/>
             <button className="btn-save" onClick={()=>{
               const n = name||(classData?classData.name:'New class');
-              setTplDirty(false);
               onClose();
-              onSave(n, {
-                colour, classType, classFormat,
-                category: isV2 ? categoryMulti : category,
-                facility,
-                eligibleFacilities,
-                classSize, level,
-                eligibleTrainers: trainers,
-                imageUrl,
-              });
+              onSave(n, {colour, classType, category, facility, classSize, level, eligibleTrainers:trainers});
             }}>Save</button>
           </div>
         </div>
@@ -1879,235 +1754,139 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
 
           {/* ── Class details ── */}
           <div className="card">
-            <div className="card-title">Class details</div>
+            <div className="card-title">Class details<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
             <div className="f-group">
-              <label className="f-label">Name<span className="req">*</span></label>
-              <input className="f-input" placeholder="Enter class name here" value={name} onChange={e=>{setName(e.target.value);markDirty();}}/>
+              <label className="f-label">Name<DSTag show={dsOn} name="TextFieldV3" path="Atoms/FormControls/TextField"/></label>
+              <input className="f-input" placeholder="Place holder" value={name} onChange={e=>setName(e.target.value)}/>
             </div>
             <div className="f-group">
-              <label className="f-label">Description<span className="req">*</span></label>
-              <textarea className="f-textarea" rows="3" placeholder="Enter class description here" value={desc} onChange={e=>{setDesc(e.target.value);markDirty();}}/>
+              <label className="f-label">Description<DSTag show={dsOn} name="TextArea" path="Atoms/FormControls/TextField/TextArea"/></label>
+              <textarea className="f-textarea" rows="3" placeholder="Place holder" value={desc} onChange={e=>setDesc(e.target.value)}/>
             </div>
             <div className="f-group">
-              <label className="f-label">Colour</label>
-              {isV2 ? (
-                <V2ColourSel value={colour} onChange={v=>{setColour(v);markDirty();}}/>
-              ) : (
-                <ColourSel value={colour} onChange={v=>{setColour(v);markDirty();}}/>
-              )}
-              <div style={{fontSize:12,color:'var(--kit-light)',marginTop:6}}>This colour will represent this class in the calendar</div>
+              <label className="f-label">Colour<DSTag show={dsOn} name="SelectV3" path='Atoms/FormControls/Select (children API, optionLabelProp="label")'/></label>
+              <ColourSel value={colour} onChange={setColour}/>
+              <div style={{fontSize:12,color:'var(--kit-light)',marginTop:6}}>This colour will represent this class in the calendar<DSTag show={dsOn} name="InputHint" path="Atoms/Typography/Templates/InputHint"/></div>
             </div>
             <div className="f-group" style={{marginBottom:0}}>
-              <label className="f-label">Image</label>
-              {isV2 ? (
-                <div className="upl-well">
-                  {imageUrl ? (
-                    <div className="upl-thumb" style={{backgroundImage:`url(${imageUrl})`}}>
-                      <button className="upl-thumb-rm" onClick={()=>{setImageUrl('');markDirty();}} aria-label="Remove image">{I.close}</button>
-                    </div>
-                  ) : (
-                    <label className="upl-card">
-                      <span className="upl-plus">{I.plus}</span>
-                      Upload
-                      <input type="file" accept="image/png,image/jpeg" style={{display:'none'}} onChange={e=>{
-                        const f = e.target.files?.[0];
-                        if (f) { setImageUrl(URL.createObjectURL(f)); markDirty(); }
-                      }}/>
-                    </label>
-                  )}
-                  <span className="upl-hint">Image should be less than 1 MB&nbsp;&nbsp;(PNG, JPG or JPEG only)</span>
-                </div>
-              ) : (
-                <div className="img-upload-row">
-                  <button className="img-upload-btn">{I.plus} Upload</button>
-                  <span className="img-upload-hint">Image should be less than 1 MB. PNG, JPG or JPEG only</span>
-                </div>
-              )}
+              <label className="f-label">Image<DSTag show={dsOn} name="Uploader + ImageCrop" path="Atoms/FormControls/Uploader · Atoms/ImageCrop"/></label>
+              <div className="img-upload-row">
+                <button className="img-upload-btn">{I.plus} Upload</button>
+                <span className="img-upload-hint">Image should be less than 1 MB. PNG, JPG or JPEG only</span>
+              </div>
             </div>
           </div>
 
           {/* ── Class settings ── */}
           <div className="card">
-            <div className="card-title">Class settings</div>
+            <div className="card-title">Class settings<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
             <div className="f-group">
-              <label className="f-label">{isV2 ? 'Class format' : 'Class type'}</label>
-              {isV2 ? (
-                <div className="seg-pill-v2">
-                  <button className={classFormat==='In person'?'on':''} onClick={()=>{setClassFormat('In person');markDirty();}}>In person</button>
-                  <button className={classFormat==='Online'?'on':''}    onClick={()=>{setClassFormat('Online');markDirty();}}>Online</button>
-                </div>
-              ) : (
-                <SegCtrl options={['Onsite','Online']} value={classType} onChange={v=>{setClassType(v);markDirty();}}/>
-              )}
+              <label className="f-label">{isV2 ? 'Class format' : 'Class type'}<DSTag show={dsOn} name='Radio.Group buttonStyle="solid"' path="Atoms/FormControls/Radio"/></label>
+              {isV2
+                ? <SegCtrl options={['In person','Online']} value={classFormat} onChange={setClassFormat}/>
+                : <SegCtrl options={['Onsite','Online']}   value={classType}   onChange={setClassType}/>}
             </div>
             <div className="f-group">
-              <label className="f-label">Categories<span className="req">*</span></label>
-              {isV2 ? (
-                <MultiSel value={categoryMulti} onChange={v=>{setCategoryMulti(v);markDirty();}} opts={CATEGORIES_LIST} placeholder="Select all that apply"/>
-              ) : (
-                <Sel value={category} onChange={v=>{setCategory(v);markDirty();}} opts={CATEGORIES_LIST} placeholder="Select all that apply"/>
-              )}
+              <label className="f-label">Categories<DSTag show={dsOn} name='SelectV3 mode="multiple"' path="Atoms/FormControls/Select"/></label>
+              <Sel value={category} onChange={setCategory} opts={CATEGORIES_LIST} placeholder="Select all that apply"/>
             </div>
             {isV2 ? (
               <div className="f-group">
-                <label className="f-label">Eligible facilities<span className="req">*</span></label>
-                <MultiSel value={eligibleFacilities} onChange={v=>{setEligibleFacilities(v);markDirty();}} opts={FACILITIES_LIST} placeholder="Select all that apply"/>
+                <label className="f-label">Eligible facilities<DSTag show={dsOn} name='SelectV3 mode="multiple"' path="Atoms/FormControls/Select"/></label>
+                <MultiSel value={eligibleFacilities} onChange={setEligibleFacilities} opts={FACILITIES_LIST} placeholder="Select all that apply"/>
               </div>
             ) : (
               <div className="f-group">
                 <label className="f-label">Facility</label>
-                <Sel value={facility} onChange={v=>{setFacility(v);markDirty();}} opts={FACILITIES_LIST} placeholder="## FACILITY"/>
+                <Sel value={facility} onChange={setFacility} opts={FACILITIES_LIST} placeholder="## FACILITY"/>
               </div>
             )}
             <div className="f-group">
-              <label className="f-label">Eligible trainers{isV2 && <span className="req">*</span>}</label>
-              <MultiSel value={trainers} onChange={v=>{setTrainers(v);markDirty();}} opts={TRAINERS_LIST} placeholder="Select all eligible trainers"/>
+              <label className="f-label">Eligible trainers<DSTag show={dsOn} name='SelectV3 mode="multiple"' path="Atoms/FormControls/Select"/></label>
+              <MultiSel value={trainers} onChange={setTrainers} opts={TRAINERS_LIST} placeholder="Select all eligible trainers"/>
             </div>
             <div className="f-group">
-              <label className="f-label">Class size</label>
-              <input className="f-input" type="number" value={classSize} onChange={e=>{setClassSize(e.target.value);markDirty();}} placeholder="Enter number here"/>
+              <label className="f-label">Class size<DSTag show={dsOn} name="InputNumber" path="Atoms/FormControls/InputNumber"/></label>
+              <input className="f-input" type="number" value={classSize} onChange={e=>setClassSize(e.target.value)} placeholder="Enter number here"/>
             </div>
             <div className="f-group" style={{marginBottom:0}}>
-              <label className="f-label">Level</label>
-              <Sel value={level} onChange={v=>{setLevel(v);markDirty();}} opts={LEVEL_OPTS}/>
+              <label className="f-label">Level<DSTag show={dsOn} name="SelectV3" path="Atoms/FormControls/Select"/></label>
+              <Sel value={level} onChange={setLevel} opts={LEVEL_OPTS}/>
             </div>
           </div>
 
           {/* ── Pricing (V1) / Pricing / eligibility (V2) ── */}
           {isV2 ? (
             <>
-              <div className="card pricing-card-v2">
-                <div className="pricing-fixed">
-                  <div className="card-title">Pricing / eligibility</div>
+              <div className="card">
+                <div className="card-title">Pricing / eligibility<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
 
-                  {/* Class format (In person / Online) — Figma 274:25513 */}
-                  <div className="f-group">
-                    <label className="f-label">Class format</label>
-                    <div className="seg-pill-v2">
-                      <button className={classFormat==='In person'?'on':''} onClick={()=>{setClassFormat('In person');markDirty();}}>In person</button>
-                      <button className={classFormat==='Online'?'on':''}    onClick={()=>{setClassFormat('Online');markDirty();}}>Online</button>
-                    </div>
+                {/* Glofox bookings row */}
+                <div className="bk-row">
+                  <span className="bk-row-lbl">Glofox bookings:<DSTag show={dsOn} name='Radio.Group buttonStyle="solid"' path="Atoms/FormControls/Radio"/></span>
+                  <div className="seg-pill">
+                    <button className={glofoxBookings==='Enabled'?'on':''} onClick={()=>setGlofoxBookings('Enabled')}>Enabled</button>
+                    <button className={glofoxBookings==='Disabled'?'on':''} onClick={()=>setGlofoxBookings('Disabled')}>Disabled</button>
                   </div>
-
-                  {/* Glofox + Gympass bookings */}
-                  <div className="f-group" style={{display:'flex',gap:24,alignItems:'flex-end',flexWrap:'wrap'}}>
-                    <div>
-                      <label className="f-label">Glofox bookings</label>
-                      <div className="seg-pill-v2">
-                        <button className={glofoxBookings==='Disabled'?'on':''} onClick={()=>{setGlofoxBookings('Disabled');markDirty();}}>Disabled</button>
-                        <button className={glofoxBookings==='Enabled'?'on':''}  onClick={()=>{setGlofoxBookings('Enabled');markDirty();}}>Enabled</button>
-                      </div>
-                    </div>
-                    <div style={{flex:1,minWidth:200}}>
-                      <label className="f-label">Max Glofox bookings<span className="req">*</span></label>
-                      <input className="f-input" type="number" value={maxGlofox} onChange={e=>{setMaxGlofox(e.target.value);markDirty();}} placeholder="Enter number here" disabled={glofoxBookings!=='Enabled'} style={glofoxBookings!=='Enabled'?{background:'var(--cape-light)',opacity:.6}:{}}/>
-                    </div>
-                  </div>
-
-                  <div className="f-group">
-                    <label className="f-label">Gympass bookings</label>
-                    <div className="seg-pill-v2">
-                      <button className={gympassBookings==='Disabled'?'on':''} onClick={()=>{setGympassBookings('Disabled');markDirty();}}>Disabled</button>
-                      <button className={gympassBookings==='Enabled'?'on':''}  onClick={()=>{setGympassBookings('Enabled');markDirty();}}>Enabled</button>
-                    </div>
-                  </div>
-
-                  {/* Divider */}
-                  <div style={{height:1,background:'var(--cape-primary)',margin:'8px 0 16px'}}/>
-
-                  {/* Pricing mode tabs — Figma 725:9176 */}
-                  <div className="price-mode-pill">
-                    {[['single','Single price'],['different','Different prices'],['free','Free class']].map(([t,l])=>(
-                      <button key={t} className={pricingTab===t?'on':''} onClick={()=>{setPricingTab(t);markDirty();}}>{l}</button>
-                    ))}
+                  <span style={{fontSize:13,color:'var(--kit-light)',marginLeft:'auto'}}>Max Glofox bookings:<DSTag show={dsOn} name="InputNumber" path="Atoms/FormControls/InputNumber"/></span>
+                  <div className="bk-amt" style={{width:120}}>
+                    <input type="number" value={maxGlofox} onChange={e=>setMaxGlofox(e.target.value)} placeholder="Enter number"/>
                   </div>
                 </div>
 
-                {/* Mode-specific content (scrolls within max-height) */}
-                <div className="pricing-scroll">
-                  {pricingTab === 'single' && (
-                    <>
-                      {/* Drop-in clients */}
-                      <div className="v2-price-row" style={{marginBottom:16}}>
-                        <div className="v2-price-toggle-wrap">
-                          <Toggle checked={dropInOn} onChange={v=>{setDropInOn(v);markDirty();}}/>
-                          <span className="price-label"><span className="price-label-bold">Drop in clients</span> can attend and pay</span>
-                        </div>
-                        <div className={`v2-price-amount ${!dropInOn?'disabled':''}`}>
-                          <span className="prefix">€</span>
-                          <input type="number" value={dropInPrice} onChange={e=>{setDropInPrice(e.target.value);markDirty();}} placeholder="20" disabled={!dropInOn}/>
-                        </div>
-                        <span className="v2-price-suffix">per booking</span>
-                      </div>
-                      {/* Clients (members) */}
-                      <div className="v2-price-row">
-                        <div className="v2-price-toggle-wrap">
-                          <Toggle checked={clientsOn} onChange={v=>{setClientsOn(v);markDirty();}}/>
-                          <span className="price-label"><span className="price-label-bold">Clients</span> can attend and pay</span>
-                        </div>
-                        <div className={`v2-price-amount ${!clientsOn?'disabled':''}`}>
-                          <span className="prefix">€</span>
-                          <input type="number" value={clientsPrice} onChange={e=>{setClientsPrice(e.target.value);markDirty();}} placeholder="15" disabled={!clientsOn}/>
-                        </div>
-                        <span className="v2-price-suffix">per booking</span>
-                      </div>
-                    </>
-                  )}
+                {/* Gympass bookings row */}
+                <div className="bk-row" style={{marginBottom:14}}>
+                  <span className="bk-row-lbl">Gympass bookings:<DSTag show={dsOn} name='Radio.Group buttonStyle="solid"' path="Atoms/FormControls/Radio"/></span>
+                  <div className="seg-pill">
+                    <button className={gympassBookings==='Enabled'?'on':''} onClick={()=>setGympassBookings('Enabled')}>Enabled</button>
+                    <button className={gympassBookings==='Disabled'?'on':''} onClick={()=>setGympassBookings('Disabled')}>Disabled</button>
+                  </div>
+                </div>
 
-                  {pricingTab === 'different' && (
-                    <div className="v2-price-scroll">
-                      {/* Drop-in row stays at top */}
-                      <div className="v2-price-row">
-                        <div className="v2-price-toggle-wrap">
-                          <Toggle checked={dropInOn} onChange={v=>{setDropInOn(v);markDirty();}}/>
-                          <span className="price-label"><span className="price-label-bold">Drop in clients</span> can attend and will be charged</span>
-                        </div>
-                        <div className={`v2-price-amount ${!dropInOn?'disabled':''}`}>
-                          <span className="prefix">€</span>
-                          <input type="number" value={dropInPrice} onChange={e=>{setDropInPrice(e.target.value);markDirty();}} placeholder="20" disabled={!dropInOn}/>
-                        </div>
-                        <span className="v2-price-suffix">per booking</span>
-                      </div>
-                      {/* Memberships — toggles off by default */}
-                      {MEMBERSHIPS.map(m => {
-                        const row = membershipPrices[m] || {on:false,price:''};
-                        return (
-                          <div key={m} className="v2-price-row">
-                            <div className="v2-price-toggle-wrap">
-                              <Toggle checked={row.on} onChange={v=>{
-                                setMembershipPrices(p=>({...p,[m]:{...row,on:v}}));
-                                markDirty();
-                              }}/>
-                              <span className="price-label"><span className="price-label-bold">{m}</span> can attend and will be charged</span>
-                            </div>
-                            <div className={`v2-price-amount ${!row.on?'disabled':''}`}>
-                              <span className="prefix">€</span>
-                              <input type="number" value={row.price} onChange={e=>{
-                                setMembershipPrices(p=>({...p,[m]:{...row,price:e.target.value}}));
-                                markDirty();
-                              }} placeholder="20" disabled={!row.on}/>
-                            </div>
-                            <span className="v2-price-suffix">per booking</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                {dsOn && <div style={{height:1,background:'var(--cape-primary)',margin:'10px 0'}}/>}
+                {dsOn && <div style={{fontSize:10,marginBottom:8}}><DSTag show={dsOn} name="Divider" path="Atoms/Divider"/></div>}
 
-                  {pricingTab === 'free' && (
-                    <div style={{padding:'16px 0',fontFamily:'var(--font)',fontSize:14,lineHeight:'20px',color:'var(--kit-light)'}}>
-                      No payment required. Clients can book and attend this class for free.
-                    </div>
-                  )}
+                {/* Pricing tabs */}
+                <div className="ds-tag-row" style={{marginBottom:dsOn?6:0}}>
+                  {dsOn && <DSTag show={dsOn} name='Radio.Group buttonStyle="solid" (3 options)' path="Atoms/FormControls/Radio"/>}
+                </div>
+                <div className="pricing-tabs">
+                  {[['single','Single price'],['different','Different prices'],['free','Free class']].map(([t,l])=>(
+                    <button key={t} className={`pricing-tab ${pricingTab===t?'active':''}`} onClick={()=>setPricingTab(t)}>{l}</button>
+                  ))}
+                </div>
+
+                {/* Drop-in clients */}
+                <div className="bk-toggle-row">
+                  <Toggle checked={dropInOn} onChange={setDropInOn}/><DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
+                  <div className="bk-toggle-body">
+                    <div className="bk-toggle-title">Drop-in clients</div>
+                    <div className="bk-toggle-desc">Allow drop-in clients to attend and set the price.</div>
+                  </div>
+                  <div className="bk-amt"><span className="bk-amt-prefix">€</span><input type="number" value={dropInPrice} onChange={e=>setDropInPrice(e.target.value)} placeholder="Enter amount" disabled={!dropInOn}/></div>
+                  <DSTag show={dsOn} name='TextFieldV3 prefix="€"' path="Atoms/FormControls/TextField"/>
+                  <span style={{fontSize:13,color:'var(--kit-light)'}}>per booking</span>
+                </div>
+
+                {/* Client cancellation fee */}
+                <div className="bk-toggle-row" style={{marginBottom:0}}>
+                  <Toggle checked={clientCancelOn} onChange={setClientCancelOn}/><DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
+                  <div className="bk-toggle-body">
+                    <div className="bk-toggle-title">Clients can cancel and re-pay</div>
+                    <div className="bk-toggle-desc">Charge a fee if a client cancels and re-books.</div>
+                  </div>
+                  <div className="bk-amt"><span className="bk-amt-prefix">€</span><input type="number" value={clientCancelFee} onChange={e=>setClientCancelFee(e.target.value)} placeholder="Enter amount" disabled={!clientCancelOn}/></div>
+                  <DSTag show={dsOn} name='TextFieldV3 prefix="€"' path="Atoms/FormControls/TextField"/>
+                  <span style={{fontSize:13,color:'var(--kit-light)'}}>per booking</span>
                 </div>
               </div>
 
-              {/* Tax — own card (multi-select) */}
+              {/* Tax (V2 separate card) */}
               <div className="card">
-                <div className="card-title">Tax</div>
+                <div className="card-title">Tax<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
                 <div className="f-group" style={{marginBottom:0}}>
-                  <label className="f-label">Taxes</label>
-                  <MultiSel value={taxes} onChange={v=>{setTaxes(v);markDirty();}} opts={TAXES_LIST} placeholder="Select which taxes apply to this class"/>
+                  <label className="f-label">Taxes<DSTag show={dsOn} name='SelectV3 mode="multiple"' path="Atoms/FormControls/Select"/></label>
+                  <Sel value={taxes} onChange={setTaxes} opts={['No taxes','VAT 20%','VAT 10%','Custom rate']} placeholder="Select which taxes apply to this class"/>
                 </div>
               </div>
             </>
@@ -2121,121 +1900,100 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
               </div>
               <div className="f-group" style={{marginBottom:0}}>
                 <label className="f-label">Taxes</label>
-                <Sel value={Array.isArray(taxes)?taxes[0]||'':taxes} onChange={v=>setTaxes([v])} opts={TAXES_LIST} placeholder="Select which taxes apply to this class"/>
+                <Sel value={taxes} onChange={setTaxes} opts={['No taxes','VAT 20%','VAT 10%','Custom rate']} placeholder="Select which taxes apply to this class"/>
               </div>
             </div>
           )}
 
           {/* ── Spot booking ── */}
           <div className="card">
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:spotBook?16:0}}>
-              <div className="card-title" style={{margin:0}}>Spot booking</div>
-              <Toggle checked={spotBook} onChange={v=>{setSpotBook(v);markDirty();}}/>
-            </div>
-            {isV2 && !spotBook && (
-              <a href="#" onClick={e=>e.preventDefault()} style={{display:'inline-block',marginTop:12,fontSize:13,fontWeight:700,color:'var(--arctic-primary)',textDecoration:'underline'}}>Learn more</a>
-            )}
-            {spotBook && (
-              <div className="f-group" style={{marginBottom:0}}>
-                <label className="f-label">Room layout<span className="req">*</span></label>
-                <Sel value={roomLayout} onChange={v=>{setRoomLayout(v);markDirty();}} opts={ROOM_LAYOUTS} placeholder="Select room layout"/>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:(spotBook && !isV2) ? 16 : 0}}>
+              <div className="card-title" style={{margin:0}}>Spot booking<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
+              <div style={{display:'flex',alignItems:'center',gap:6}}>
+                <Toggle checked={spotBook} onChange={setSpotBook}/>
+                <DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
               </div>
+            </div>
+            {isV2 ? (
+              <>
+                <a href="#" onClick={e=>e.preventDefault()} style={{display:'inline-block',marginTop:12,fontSize:13,fontWeight:700,color:'var(--arctic-primary)',textDecoration:'underline'}}>Learn more</a>
+                <DSTag show={dsOn} name="ButtonV3 (link variant)" path="Atoms/Buttons/Button"/>
+              </>
+            ) : (
+              spotBook && (
+                <div className="f-group" style={{marginBottom:0}}>
+                  <label className="f-label">Room layout</label>
+                  <Sel value={roomLayout} onChange={setRoomLayout} opts={['Standard','Theatre','Classroom','Horseshoe']} placeholder="Select room layout"/>
+                </div>
+              )
             )}
           </div>
 
-          {/* ── Schedules — only shown when editing an existing template (V2: new Figma design) ── */}
-          {!isNewTpl && (
-            isV2 ? (() => {
-              const schd = classData ? CLASS_SCHEDULE_DATA[classData.name] : null;
+          {/* ── Advanced settings (V2 only) ── */}
+          {isV2 && (
+            <div className="card">
+              <div className="card-title">Advanced settings<DSTag show={dsOn} kind="card" name="CardV3" path="Atoms/Card"/></div>
+              <div className="bk-toggle-row">
+                <Toggle checked={emailNotifs} onChange={setEmailNotifs}/><DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
+                <div className="bk-toggle-body">
+                  <div className="bk-toggle-title">Email booking notifications</div>
+                  <div className="bk-toggle-desc">When enabled, assigned trainers and admins will be notified when a member books or cancels.</div>
+                </div>
+              </div>
+              <div className="bk-toggle-row" style={{marginBottom:0}}>
+                <Toggle checked={privateClass} onChange={setPrivateClass}/><DSTag show={dsOn} name="Switch" path="Atoms/FormControls/Switch"/>
+                <div className="bk-toggle-body">
+                  <div className="bk-toggle-title">Private</div>
+                  <div className="bk-toggle-desc">When enabled, this class is hidden from the member app.</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── Schedules ── */}
+          <div className="card">
+            <div className="card-title">Schedules</div>
+            {classData ? (() => {
+              const schd = CLASS_SCHEDULE_DATA[classData.name];
               return (
-                <div className="card">
-                  <div className="card-title">Schedules</div>
-                  <div className="sch-card-sub">
-                    <span className="sch-card-sub-text">Create new or edit current schedules from the Calendar.</span>
-                    <button className="sch-open-cal-btn" onClick={()=>tryNavToCalendar(schd)}>
-                      {I.openExt} Open calendar
-                    </button>
+                <>
+                  <div style={{fontSize:13,color:'var(--kit-light)',marginBottom:12}}>
+                    Schedules linked to this class. To edit a schedule, you will be taken to the calendar.
                   </div>
                   {schd ? (
-                    <div className="sch-well">
-                      <div className="sch-well-title">{schd.days.join(', ')}</div>
-                      <div className="sch-well-meta">Every {schd.every} {schd.unit.toLowerCase()} | From {schd.startDate}</div>
-                      <div className="sch-well-times">
-                        {schd.days.map(d => {
-                          const ts = schd.daySlots?.[d] || [];
-                          const dayLabel = ({Sun:'Sundays',Mon:'Mondays',Tue:'Tuesdays',Wed:'Wednesdays',Thu:'Thursdays',Fri:'Fridays',Sat:'Saturdays'})[d] || d;
-                          return `${dayLabel}: ${ts.map(t=>`${t.start}-${t.end}`).join(', ')}`;
-                        }).join(' | ')}
+                    <div className="sched-read-section">
+                      <div className="sched-read-row">
+                        <div>
+                          <div style={{fontSize:13,fontWeight:700}}>{schd.days.join(', ')}</div>
+                          <div className="sched-read-detail">
+                            {(() => {
+                              const firstDay = schd.days[0];
+                              const times = (schd.daySlots[firstDay] || []);
+                              const timeStr = times.length ? `${times[0].start}–${times[0].end}` : '';
+                              return `${timeStr ? timeStr + ' · ' : ''}Every ${schd.every} ${schd.unit} · From ${schd.startDate}`;
+                            })()}
+                          </div>
+                        </div>
+                        <button className="edit-in-cal-btn" onClick={()=>onGoToCalendar(schd)}>
+                          Edit in calendar {I.arrow}
+                        </button>
                       </div>
                     </div>
                   ) : (
-                    <div className="sch-empty">No schedules yet for this class.</div>
+                    <div style={{textAlign:'center',color:'var(--kit-lighter)',fontSize:13,padding:'12px 0'}}>No schedules yet.</div>
                   )}
-                </div>
+                  <button className="edit-in-cal-btn" style={{marginTop:10}} onClick={()=>onGoToCalendar(null)}>
+                    {I.plus} Add schedule in calendar
+                  </button>
+                </>
               );
             })() : (
-              <div className="card">
-                <div className="card-title">Schedules</div>
-                {(() => {
-                  const schd = classData ? CLASS_SCHEDULE_DATA[classData.name] : null;
-                  return (
-                    <>
-                      <div style={{fontSize:13,color:'var(--kit-light)',marginBottom:12}}>
-                        Schedules linked to this class. To edit a schedule, you will be taken to the calendar.
-                      </div>
-                      {schd ? (
-                        <div className="sched-read-section">
-                          <div className="sched-read-row">
-                            <div>
-                              <div style={{fontSize:13,fontWeight:700}}>{schd.days.join(', ')}</div>
-                              <div className="sched-read-detail">
-                                {(() => {
-                                  const firstDay = schd.days[0];
-                                  const times = (schd.daySlots[firstDay] || []);
-                                  const timeStr = times.length ? `${times[0].start}–${times[0].end}` : '';
-                                  return `${timeStr ? timeStr + ' · ' : ''}Every ${schd.every} ${schd.unit} · From ${schd.startDate}`;
-                                })()}
-                              </div>
-                            </div>
-                            <button className="edit-in-cal-btn" onClick={()=>tryNavToCalendar(schd)}>
-                              Edit in calendar {I.arrow}
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div style={{textAlign:'center',color:'var(--kit-lighter)',fontSize:13,padding:'12px 0'}}>No schedules yet.</div>
-                      )}
-                      <button className="edit-in-cal-btn" style={{marginTop:10}} onClick={()=>tryNavToCalendar(null)}>
-                        {I.plus} Add schedule in calendar
-                      </button>
-                    </>
-                  );
-                })()}
+              <div style={{textAlign:'center',color:'var(--kit-lighter)',fontSize:13,padding:'16px 0'}}>
+                No schedules yet. Save this class template and add schedules from the calendar.
               </div>
-            )
-          )}
-        </div>
-
-        {/* ── Unsaved-changes confirmation modal ── */}
-        {pendingNav !== null && (
-          <div className="modal-overlay" onClick={()=>setPendingNav(null)}>
-            <div className="modal unsaved-modal" onClick={e=>e.stopPropagation()}>
-              <h2>Unsaved changes</h2>
-              <p>You have unsaved changes on this class template. Would you like to save your changes before proceeding to the calendar?</p>
-              <div className="modal-footer">
-                <button className="btn-cancel" onClick={()=>setPendingNav(null)}>Cancel</button>
-                <button className="btn-confirm" onClick={()=>{
-                  const target = pendingNav;
-                  const n = name||(classData?classData.name:'New class');
-                  onSave(n, {colour, classType, classFormat, category:isV2?categoryMulti:category, facility, eligibleFacilities, classSize, level, eligibleTrainers:trainers, imageUrl});
-                  setTplDirty(false);
-                  setPendingNav(null);
-                  onGoToCalendar(target);
-                }}>Save changes</button>
-              </div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </>
   );
@@ -2462,7 +2220,7 @@ function WeekView({ onSlotClick, fc, onEventClick, templates }) {
     let x=r.right+6, y=r.top;
     if(x+162>window.innerWidth) x=r.left-168;
     if(y+160>window.innerHeight) y=window.innerHeight-165;
-    setSlotMenu({x,y,di,hv});
+    setSlotMenu({x,y});
   };
   const handleEvClick = (e, ev) => {
     if(!fc.showEventPopup) return;
@@ -2516,7 +2274,7 @@ function WeekView({ onSlotClick, fc, onEventClick, templates }) {
       </div>
       {slotMenu && (
         <SlotMenu x={slotMenu.x} y={slotMenu.y}
-          onSelect={t=>{if(t==='Class')onSlotClick({di:slotMenu.di, hv:slotMenu.hv});setSlotMenu(null);}}
+          onSelect={t=>{if(t==='Class')onSlotClick();setSlotMenu(null);}}
           onClose={()=>setSlotMenu(null)}/>
       )}
     </div>
@@ -2693,8 +2451,41 @@ const DEF_ADMIN_DEFS = [
   ]},
 ];
 
-function AdminPanel({ fc, onFc, defFc, onDefFc, onClose, version, onVersion }) {
+// ─── DS Map Modal — developer reference for every DS component used ──────────
+function DsMapModal({ onClose }) {
+  const entries = Object.entries(DS_MAP);
+  return (
+    <div className="dsmap-backdrop" onClick={onClose}>
+      <div className="dsmap-modal" onClick={e=>e.stopPropagation()}>
+        <div className="dsmap-hdr">
+          <div>
+            <div className="dsmap-title">Design System Mapping ({entries.length})</div>
+            <div className="dsmap-sub">Every prototype primitive → corresponding <code>@glofoxinc/react-components</code> export.</div>
+          </div>
+          <button className="dr-fab" onClick={onClose}>{I.close}</button>
+        </div>
+        <div className="dsmap-hdrrow">
+          <div>Component</div>
+          <div>Storybook path</div>
+          <div>Story</div>
+        </div>
+        <div className="dsmap-body">
+          {entries.map(([name, info]) => (
+            <div key={name} className="dsmap-row">
+              <div className="n">{name}{info.notes && <div style={{fontWeight:400,color:'var(--kit-light)',marginTop:2}}>{info.notes}</div>}</div>
+              <div className="p">{info.path}</div>
+              <div className="l"><a href={DS_BASE + info.story} target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminPanel({ fc, onFc, defFc, onDefFc, onClose, version, onVersion, showDsMap, onShowDsMap }) {
   const [tab, setTab] = useState('class');
+  const [dsMapOpen, setDsMapOpen] = useState(false);
   const isClass = tab==='class';
   const defs = isClass ? ADMIN_DEFS : DEF_ADMIN_DEFS;
   const curFc = isClass ? fc : defFc;
@@ -2720,6 +2511,26 @@ function AdminPanel({ fc, onFc, defFc, onDefFc, onClose, version, onVersion }) {
             <button className={version==='v2'?'active':''} onClick={()=>onVersion('v2')}>V2</button>
           </div>
         </div>
+        {version==='v2' && (
+          <div className="admin-sec">
+            <div className="admin-field-row" style={{padding:'10px 12px',background:'var(--cape-lighter)',borderRadius:'var(--r-md)'}}>
+              <div>
+                <div className="admin-f-name">Show design system mapping</div>
+                <div className="admin-f-desc">Display the matching <code style={{fontSize:10,background:'var(--cape-primary)',padding:'1px 4px',borderRadius:3}}>react-components</code> export on each V2 field.</div>
+              </div>
+              <Toggle checked={showDsMap} onChange={onShowDsMap}/>
+            </div>
+            <button
+              onClick={()=>setDsMapOpen(true)}
+              style={{marginTop:10,width:'100%',padding:'8px 12px',background:'#FFF',border:'1.5px solid var(--cape-dark)',borderRadius:'var(--r-md)',fontSize:13,fontWeight:700,color:'var(--kit-primary)',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:6}}>
+              {I.list}<span>View full DS map ({Object.keys(DS_MAP).length})</span>
+            </button>
+            <div style={{fontSize:11,color:'var(--kit-lighter)',marginTop:6,lineHeight:1.4}}>
+              For developers: each prototype primitive (<code style={{fontSize:10}}>Sel</code>, <code style={{fontSize:10}}>Toggle</code>, <code style={{fontSize:10}}>.f-input</code>, etc.) corresponds to a real DS component. Click any <span className="ds-tag" style={{margin:0}}>tag</span> in the UI to open its Storybook story, or grep for <code style={{fontSize:10}}>&lt;DSTag</code> in source.
+            </div>
+          </div>
+        )}
+        {dsMapOpen && <DsMapModal onClose={()=>setDsMapOpen(false)}/>}
         <div style={{height:1,background:'var(--cape-primary)',margin:'4px 0 14px'}}/>
         <div className="admin-tabs" style={{marginBottom:14}}>
           <button className={`admin-tab ${tab==='class'?'active':''}`} onClick={()=>setTab('class')}>Create Class</button>
@@ -2771,7 +2582,11 @@ function App() {
   const [version,       setVersion]       = useState(()=>{
     try { return localStorage.getItem('cs-version') || 'v1'; } catch { return 'v1'; }
   });
+  const [showDsMap,     setShowDsMap]     = useState(()=>{
+    try { return localStorage.getItem('cs-ds-map') === '1'; } catch { return false; }
+  });
   useEffect(()=>{ try { localStorage.setItem('cs-version', version); } catch {} }, [version]);
+  useEffect(()=>{ try { localStorage.setItem('cs-ds-map', showDsMap?'1':'0'); } catch {} }, [showDsMap]);
   const [fc,            setFc]            = useState(DEFAULT_FC);
   const [defFc,         setDefFc]         = useState(DEFAULT_DEF_FC);
   const [toast,         setToast]         = useState(null);
@@ -2780,7 +2595,7 @@ function App() {
   const [bookingEvent,  setBookingEvent]  = useState(null);
 
   const showToast  = msg => setToast(msg);
-  const openCreate = (slot=null) => { setDrawer({mode:'create',event:null,initialSlot:slot}); setCreateMenu(false); };
+  const openCreate = ()  => { setDrawer({mode:'create',event:null}); setCreateMenu(false); };
 
   const handleGoToCalendar = sched => {
     const className = defDrawerData?.name;
@@ -2889,7 +2704,7 @@ function App() {
           event={drawer.event}
           templates={templateData}
           version={version}
-          initialSlot={drawer.initialSlot || null}
+          showDsMap={showDsMap}
         />
       )}
 
@@ -2906,6 +2721,7 @@ function App() {
         onGoToCalendar={handleGoToCalendar}
         classData={defDrawerData}
         version={version}
+        showDsMap={showDsMap}
       />
 
       {/* ── Event popup ── */}
@@ -2947,6 +2763,8 @@ function App() {
           onClose={()=>setAdmin(false)}
           version={version}
           onVersion={setVersion}
+          showDsMap={showDsMap}
+          onShowDsMap={setShowDsMap}
         />
       )}
 
