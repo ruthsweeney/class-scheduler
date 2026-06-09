@@ -133,6 +133,15 @@
     .f-hint{display:flex;gap:8px;align-items:flex-start;margin-top:8px;padding:8px 10px;border-radius:var(--r-md);font-size:12px;line-height:18px}
     .f-hint-info{background:#EEF0FF;color:#3C2EAA;border:1px solid #DCDCFE}
     .f-hint-info svg{flex-shrink:0;margin-top:1px;color:#5B57E0}
+
+    /* ── Custom display name row (Figma 1012:23031) ── */
+    .cdn-row{display:flex;align-items:center;gap:24px;margin-top:12px}
+    .cdn-tog{display:flex;align-items:center;gap:8px;padding:6px 16px 6px 12px;border-radius:12px;cursor:pointer;user-select:none}
+    .cdn-tog .priv-title{font-family:var(--font);font-size:14px;font-weight:700;color:var(--kit-primary);line-height:20px;white-space:nowrap}
+    .cdn-input{flex:1;min-width:0;height:36px;border:1px solid var(--cape-darker);border-radius:12px;background:#fff;padding:0 12px;font-family:var(--font);font-size:14px;color:var(--kit-primary);transition:border-color .12s,background .12s}
+    .cdn-input::placeholder{color:var(--kit-light)}
+    .cdn-input:focus{border-color:var(--arctic-primary);outline:none}
+    .cdn-input:disabled{background:var(--cape-light);color:var(--kit-light);cursor:not-allowed;opacity:.7}
     .ev{border-radius:var(--r-sm);padding:4px 7px;margin-bottom:2px;cursor:pointer;transition:opacity .1s;position:relative}
     .ev-cancelled{filter:grayscale(.85);opacity:.7}
     .ev-cancelled .ev-title,.ev-cancelled .ev-time,.ev-cancelled .ev-inst{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.85)}
@@ -1319,6 +1328,9 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
   const [cls,        setCls]        = useState(isEdit ? event?.t||'' : '');
   const [trainer,    setTrainer]    = useState(isEdit ? tpl.trainer||event?.i||'' : '');
   const [isSub,      setIsSub]      = useState(isEdit ? !!(event?.isSub ?? tpl.isSub) : false);
+  // Custom display name (Figma 1012:23031) — only available in create + editSingle modes
+  const [customNameOn, setCustomNameOn] = useState(isEdit ? !!event?.customName : false);
+  const [customName,   setCustomName]   = useState(isEdit ? (event?.customName||'') : '');
 
   // Edit-only extra class details — pre-populated from CLASS_TEMPLATES
   const [classOnline,setClassOnline]= useState(isEdit ? tpl.classType||'Onsite' : 'Onsite');
@@ -1439,11 +1451,18 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
   const rmDsTime  = (eid,tid) => setDsEntries(p=>p.map(e=>e.id===eid?{...e,times:e.times.length>1?e.times.filter(t=>t.id!==tid):e.times}:e));
   const updDsTime = (eid,tid,f,v) => { setIsDirty(true); setDsEntries(p=>p.map(e=>e.id===eid?{...e,times:e.times.map(t=>t.id===tid?{...t,[f]:v}:t)}:e)); };
 
+  // Resolve the final display name: custom display name wins when enabled & non-empty.
+  const finalName = () => {
+    const cn = customName.trim();
+    if (fc.showCustomName && customNameOn && cn) return cn;
+    return cls || 'New class';
+  };
+
   const handleSave = () => {
     if (isRecEdit) { setShowConfirm(true); return; }
-    onClose(); onSave(cls||'New class');
+    onClose(); onSave(finalName());
   };
-  const handleConfirm = () => { setShowConfirm(false); onClose(); onSave(cls||'New class'); };
+  const handleConfirm = () => { setShowConfirm(false); onClose(); onSave(finalName()); };
 
   // Build change summary for confirm modal
   const changeSummary = [
@@ -1513,6 +1532,23 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                 <div className="f-hint f-hint-info">
                   {I.info}
                   <span><strong>Placeholder schedule.</strong> Reserves the time slot with basic info. An admin can replace it with a real class template later.</span>
+                </div>
+              )}
+              {/* Custom display name — Figma 1012:23031.  Only in create + editSingle. */}
+              {fc.showCustomName && (mode==='create' || mode==='editSingle') && (
+                <div className="cdn-row">
+                  <div className="cdn-tog">
+                    <Toggle checked={customNameOn} onChange={v=>{setCustomNameOn(v);setIsDirty(true);}}/>
+                    <span className="priv-title" onClick={()=>{setCustomNameOn(v=>!v);setIsDirty(true);}} style={{cursor:'pointer'}}>Custom display name</span>
+                  </div>
+                  <input
+                    className="cdn-input"
+                    type="text"
+                    placeholder="Enter class name here"
+                    value={customName}
+                    disabled={!customNameOn}
+                    onChange={e=>{setCustomName(e.target.value);setIsDirty(true);}}
+                  />
                 </div>
               )}
             </div>
@@ -1895,14 +1931,14 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
                 <button style={{width:28,height:28,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--kit-light)'}} onClick={()=>setShowDelMenu(false)}>{I.close}</button>
               </div>
               <div className="modal-body">
-                <button className="del-option" onClick={()=>{setShowDelMenu(false);onClose();onSave(cls,'cancel');}}>
+                <button className="del-option" onClick={()=>{setShowDelMenu(false);onClose();onSave(finalName(),'cancel');}}>
                   <div className="del-option-ico" style={{background:'var(--cape-light)',color:'var(--kit-primary)'}}>{I.info}</div>
                   <div className="del-option-text">
                     <div className="del-option-title">Cancel class</div>
                     <div className="del-option-desc">The class stays on the calendar marked as <strong>Cancelled</strong>. Members are notified and bookings are released.</div>
                   </div>
                 </button>
-                <button className="del-option" onClick={()=>{setShowDelMenu(false);onClose();onSave(cls,'delete');}}>
+                <button className="del-option" onClick={()=>{setShowDelMenu(false);onClose();onSave(finalName(),'delete');}}>
                   <div className="del-option-ico" style={{background:'#FEE7EA',color:'#DE233C'}}>{I.trash}</div>
                   <div className="del-option-text">
                     <div className="del-option-title">Delete from schedule</div>
@@ -2873,6 +2909,7 @@ const DEFAULT_FC = {
   showEventPopup:true,
   showDuplicateClass:true,
   showPlaceholderTpl:false,
+  showCustomName:true,
 };
 const DEFAULT_DEF_FC = {
   defDesc:true, defImage:true, defClassType:true, defCategory:true,
@@ -2888,6 +2925,7 @@ const ADMIN_DEFS = [
   ]},
   { section:'Schedule creation', sub:'Options shown in the Class dropdown', fields:[
     {k:'showPlaceholderTpl', n:'Placeholder template', d:'Lets admins reserve a time slot when no real class template is ready yet'},
+    {k:'showCustomName',     n:'Custom display name',  d:'Let users override the class name when creating or editing a single instance from the calendar'},
   ]},
 ];
 const DEF_ADMIN_DEFS = [
