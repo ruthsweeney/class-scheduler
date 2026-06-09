@@ -1299,7 +1299,7 @@ function V2ColourSel({ value, onChange }) {
 }
 
 // ─── Class Drawer (Create + Edit) ────────────────────────────────
-function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templates, version='v2', initialSlot=null, onDelete }) {
+function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templates, version='v2', initialSlot=null, onDelete, fc={} }) {
   const isV2 = version === 'v2';
   const isEdit    = mode === 'editSingle' || mode === 'editRecurring';
   const isRecEdit = mode === 'editRecurring';
@@ -1508,8 +1508,8 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
             {/* Class */}
             <div className="f-group">
               <label className="f-label">Class<span className="req">*</span></label>
-              <Sel value={cls} onChange={v=>{setCls(v);setIsDirty(true);}} opts={CLASSES_LIST} placeholder="Select class"/>
-              {cls === PLACEHOLDER_TPL && (
+              <Sel value={cls} onChange={v=>{setCls(v);setIsDirty(true);}} opts={fc.showPlaceholderTpl ? CLASSES_LIST : CLASSES_LIST.filter(c=>c!==PLACEHOLDER_TPL)} placeholder="Select class"/>
+              {fc.showPlaceholderTpl && cls === PLACEHOLDER_TPL && (
                 <div className="f-hint f-hint-info">
                   {I.info}
                   <span><strong>Placeholder schedule.</strong> Reserves the time slot with basic info. An admin can replace it with a real class template later.</span>
@@ -2872,6 +2872,7 @@ function ManageLayout({ subView, onSubView, onCreateClass, onToast, onSelectClas
 const DEFAULT_FC = {
   showEventPopup:true,
   showDuplicateClass:true,
+  showPlaceholderTpl:false,
 };
 const DEFAULT_DEF_FC = {
   defDesc:true, defImage:true, defClassType:true, defCategory:true,
@@ -2884,6 +2885,9 @@ const ADMIN_DEFS = [
   { section:'Calendar', sub:'Calendar event interactions', fields:[
     {k:'showEventPopup',     n:'Event popup',       d:'Click/hover on calendar events for a details card'},
     {k:'showDuplicateClass', n:'Duplicate class',   d:'Allow duplicating a class from the popup'},
+  ]},
+  { section:'Schedule creation', sub:'Options shown in the Class dropdown', fields:[
+    {k:'showPlaceholderTpl', n:'Placeholder template', d:'Lets admins reserve a time slot when no real class template is ready yet'},
   ]},
 ];
 const DEF_ADMIN_DEFS = [
@@ -3108,6 +3112,7 @@ function App() {
           templates={templateData}
           version={version}
           initialSlot={drawer.initialSlot || null}
+          fc={fc}
         />
       )}
 
