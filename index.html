@@ -387,6 +387,33 @@
     .btn-confirm:hover{background:var(--arctic-light)}
     .btn-confirm:disabled{background:var(--cape-dark);box-shadow:none;cursor:not-allowed}
 
+    /* ── Figma dialog (548:32085 save tpl / 893:22370 discard) ── */
+    .dlg{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 10px 40px rgba(25,28,35,.2);max-width:calc(100vw - 32px)}
+    .dlg-tpl-save{width:680px}
+    .dlg-discard{width:560px}
+    .dlg-hdr{height:56px;background:#E9E9F0;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 24px}
+    .dlg-hdr-title{font-family:var(--font);font-size:16px;font-weight:700;color:var(--kit-primary);line-height:24px}
+    .dlg-close{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--kit-light);background:transparent;transition:background .12s}
+    .dlg-close:hover{background:rgba(0,0,0,.06)}
+    .dlg-body{padding:24px 24px 48px;display:flex;flex-direction:column;gap:24px}
+    .dlg-body-q{font-family:var(--font);font-size:16px;font-weight:400;color:var(--kit-primary);line-height:24px;margin:0}
+    .dlg-radio-group{display:flex;flex-direction:column;gap:24px}
+    .dlg-radio{display:flex;gap:8px;align-items:flex-start;padding:6px 16px 6px 12px;border-radius:12px;cursor:pointer;background:transparent;text-align:left;font-family:var(--font);width:100%;border:none}
+    .dlg-radio-dot{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:0}
+    .dlg-radio-circle{width:20px;height:20px;border-radius:50%;border:2px solid var(--cape-darker);background:#fff;display:flex;align-items:center;justify-content:center;transition:border-color .12s}
+    .dlg-radio.on .dlg-radio-circle{border-color:var(--arctic-primary)}
+    .dlg-radio.on .dlg-radio-circle::after{content:'';width:12px;height:12px;border-radius:50%;background:var(--arctic-primary)}
+    .dlg-radio-text{font-family:var(--font);font-size:16px;line-height:24px;color:var(--kit-primary);font-weight:400}
+    .dlg-radio-text strong{font-weight:700}
+    .dlg-foot{height:84px;display:flex;align-items:center;justify-content:flex-end;padding:0 24px;gap:8px}
+    .dlg-btn{height:36px;padding:0 16px;border-radius:12px;font-family:var(--font);font-size:16px;font-weight:700;line-height:24px;display:inline-flex;align-items:center;justify-content:center;transition:background .12s,border-color .12s;cursor:pointer}
+    .dlg-btn-arc{background:#fff;border:1px solid var(--arctic-primary);color:var(--arctic-primary)}
+    .dlg-btn-arc:hover{background:#F4F3FE}
+    .dlg-btn-fennec{background:#008545;color:#fff;border:1px solid #008545;box-shadow:0 1px 6px rgba(0,66,34,.12),0 2px 4px rgba(0,66,34,.14),0 1px 10px rgba(0,66,34,.2)}
+    .dlg-btn-fennec:hover{background:#00753C}
+    .dlg-btn-bengal{background:#fff;border:1px solid #DE233C;color:#DE233C}
+    .dlg-btn-bengal:hover{background:#FEE7EA}
+
     /* ── Event popup (Figma design) ── */
     .ep-card{position:fixed;z-index:50;background:var(--pale-primary);border-radius:16px;box-shadow:0 5px 10px rgba(25,28,35,.10),0 8px 20px rgba(25,28,35,.07),0 3px 28px rgba(25,28,35,.06);width:284px;overflow:hidden}
     .ep-card-hdr{padding:20px 20px 8px}
@@ -1359,8 +1386,14 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
   const [showConfirm,setShowConfirm]= useState(false);
   const [applyTo,    setApplyTo]    = useState('future');
   const [isDirty,    setIsDirty]    = useState(false);
+  const [showDiscard,setShowDiscard]= useState(false);
 
   if (!open) return null;
+
+  // Close handler: prompt to discard when there are unsaved edits.
+  const handleCloseClick = () => {
+    if (isDirty) { setShowDiscard(true); } else { onClose(); }
+  };
 
   const isWeek = unit === 'Week(s)';
   const orderedSelDays = DAY_BTNS.filter(d => selDays.includes(d));
@@ -1427,12 +1460,12 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
 
   return (
     <>
-      <div className="drawer-scrim" onClick={onClose}/>
+      <div className="drawer-scrim" onClick={handleCloseClick}/>
       <div className="drawer">
 
         {/* Header */}
         <div className="drawer-hdr">
-          <button className="dr-fab" onClick={onClose}>{I.close}</button>
+          <button className="dr-fab" onClick={handleCloseClick}>{I.close}</button>
           <div className="dr-title-wrap">
             <span className="dr-label">{headerLabel}</span>
             <span className="dr-classname">{cls || (isEdit ? 'Edit class' : 'New class')}</span>
@@ -1441,7 +1474,7 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
             {isEdit && (
               <button className="btn-delete" onClick={()=>setShowDelMenu(true)}>Delete</button>
             )}
-            <button className="btn-cancel" onClick={onClose}>Cancel</button>
+            <button className="btn-cancel" onClick={handleCloseClick}>Cancel</button>
             
             <button className="btn-save" disabled={saveDisabled} onClick={handleSave}>Save</button>
           </div>
@@ -1883,6 +1916,13 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
             </div>
           </div>
         )}
+
+        {/* ── Discard changes modal (Figma 893:22370) ── */}
+        <DiscardChangesModal
+          open={showDiscard}
+          onCancel={()=>setShowDiscard(false)}
+          onDiscard={()=>{ setShowDiscard(false); setIsDirty(false); onClose(); }}
+        />
       </div>
     </>
   );
@@ -1937,42 +1977,57 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
   // Track dirty state for unsaved-changes confirmation modal
   const [tplDirty,           setTplDirty]           = useState(false);
   const [pendingNav,         setPendingNav]         = useState(null);
+  const [showSaveTpl,        setShowSaveTpl]        = useState(false);  // Figma 548:32085
+  const [showDiscard,        setShowDiscard]        = useState(false);  // Figma 893:22370
 
   if (!open) return null;
   const isNewTpl = !classData;
   const markDirty = () => setTplDirty(true);
+
+  const persistTpl = () => {
+    const n = name||(classData?classData.name:'New class');
+    onSave(n, {
+      colour, classType, classFormat,
+      category: isV2 ? categoryMulti : category,
+      facility,
+      eligibleFacilities,
+      classSize, level,
+      eligibleTrainers: trainers,
+      imageUrl,
+    });
+    setTplDirty(false);
+  };
+
+  // Save click: existing template + dirty → show save-changes modal; else save directly.
+  const handleSaveClick = () => {
+    if (!isNewTpl && tplDirty) { setShowSaveTpl(true); }
+    else { persistTpl(); onClose(); }
+  };
+
+  // Close paths (X / Cancel / scrim): if dirty, prompt discard.
+  const handleCloseClick = () => {
+    if (tplDirty) { setShowDiscard(true); } else { onClose(); }
+  };
+
   const tryNavToCalendar = sched => {
-    if (tplDirty) { setPendingNav(sched); }
+    if (tplDirty) { setPendingNav(sched); setShowSaveTpl(true); }
     else { onGoToCalendar(sched); }
   };
 
   return (
     <>
-      <div className="drawer-scrim" onClick={onClose}/>
+      <div className="drawer-scrim" onClick={handleCloseClick}/>
       <div className="drawer">
         <div className="drawer-hdr">
-          <button className="dr-fab" onClick={onClose}>{I.close}</button>
+          <button className="dr-fab" onClick={handleCloseClick}>{I.close}</button>
           <div className="dr-title-wrap">
             <span className="dr-label">{classData ? 'Edit class template' : 'Create class template'}</span>
             <span className="dr-classname">{name||(classData ? 'Edit class' : 'New class')}</span>
           </div>
           <div className="dr-actions">
-            <button className="btn-cancel" onClick={onClose}>Cancel</button>
+            <button className="btn-cancel" onClick={handleCloseClick}>Cancel</button>
             
-            <button className="btn-save" onClick={()=>{
-              const n = name||(classData?classData.name:'New class');
-              setTplDirty(false);
-              onClose();
-              onSave(n, {
-                colour, classType, classFormat,
-                category: isV2 ? categoryMulti : category,
-                facility,
-                eligibleFacilities,
-                classSize, level,
-                eligibleTrainers: trainers,
-                imageUrl,
-              });
-            }}>Save</button>
+            <button className="btn-save" onClick={handleSaveClick}>Save</button>
           </div>
         </div>
 
@@ -2093,14 +2148,14 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
                   {/* Glofox + Gympass bookings */}
                   <div className="f-group" style={{display:'flex',gap:24,alignItems:'flex-end',flexWrap:'wrap'}}>
                     <div>
-                      <label className="f-label">Glofox bookings</label>
+                      <label className="f-label">Classpass bookings</label>
                       <div className="seg-pill-v2">
                         <button className={glofoxBookings==='Disabled'?'on':''} onClick={()=>{setGlofoxBookings('Disabled');markDirty();}}>Disabled</button>
                         <button className={glofoxBookings==='Enabled'?'on':''}  onClick={()=>{setGlofoxBookings('Enabled');markDirty();}}>Enabled</button>
                       </div>
                     </div>
                     <div style={{flex:1,minWidth:200}}>
-                      <label className="f-label">Max Glofox bookings<span className="req">*</span></label>
+                      <label className="f-label">Max classpass bookings<span className="req">*</span></label>
                       <input className="f-input" type="number" value={maxGlofox} onChange={e=>{setMaxGlofox(e.target.value);markDirty();}} placeholder="Enter number here" disabled={glofoxBookings!=='Enabled'} style={glofoxBookings!=='Enabled'?{background:'var(--cape-light)',opacity:.6}:{}}/>
                     </div>
                   </div>
@@ -2317,28 +2372,89 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
           )}
         </div>
 
-        {/* ── Unsaved-changes confirmation modal ── */}
-        {pendingNav !== null && (
-          <div className="modal-overlay" onClick={()=>setPendingNav(null)}>
-            <div className="modal unsaved-modal" onClick={e=>e.stopPropagation()}>
-              <h2>Unsaved changes</h2>
-              <p>You have unsaved changes on this class template. Would you like to save your changes before proceeding to the calendar?</p>
-              <div className="modal-footer">
-                <button className="btn-cancel" onClick={()=>setPendingNav(null)}>Cancel</button>
-                <button className="btn-confirm" onClick={()=>{
-                  const target = pendingNav;
-                  const n = name||(classData?classData.name:'New class');
-                  onSave(n, {colour, classType, classFormat, category:isV2?categoryMulti:category, facility, eligibleFacilities, classSize, level, eligibleTrainers:trainers, imageUrl});
-                  setTplDirty(false);
-                  setPendingNav(null);
-                  onGoToCalendar(target);
-                }}>Save changes</button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* ── Save class template changes modal (Figma 548:32085) ── */}
+        <SaveTplChangesModal
+          open={showSaveTpl}
+          onCancel={()=>{ setShowSaveTpl(false); setPendingNav(null); }}
+          onSave={scope=>{
+            persistTpl();
+            setShowSaveTpl(false);
+            if (pendingNav !== null) {
+              const target = pendingNav;
+              setPendingNav(null);
+              onGoToCalendar(target);
+            } else {
+              onClose();
+            }
+          }}
+        />
+
+        {/* ── Discard changes modal (Figma 893:22370) ── */}
+        <DiscardChangesModal
+          open={showDiscard}
+          onCancel={()=>setShowDiscard(false)}
+          onDiscard={()=>{ setShowDiscard(false); setTplDirty(false); onClose(); }}
+        />
       </div>
     </>
+  );
+}
+
+// ─── Save Class Template Changes modal (Figma 548:32085) ─────────
+function SaveTplChangesModal({ open, onCancel, onSave }) {
+  const [scope, setScope] = useState('updateAll');
+  if (!open) return null;
+  const opts = [
+    { id:'updateAll', title:'Update all existing schedules and classes.', desc:'Every schedule and class linked to this template will be updated with your changes.' },
+    { id:'protect',   title:'Protect your individual field changes.',     desc:(<><span>{"This update will roll out across all schedules and classes linked to this template. Any "}</span><strong>field</strong><span>{" you\u2019ve manually edited on a specific class or schedule won\u2019t be touched."}</span></>) },
+    { id:'skip',      title:'Skip any schedule or class with manual edits.', desc:"Any schedule or class where you\u2019ve edited even one field will be fully skipped. No template changes will apply." },
+  ];
+  return (
+    <div className="modal-overlay" onClick={e=>{if(e.target.className==='modal-overlay')onCancel();}}>
+      <div className="dlg dlg-tpl-save" onClick={e=>e.stopPropagation()}>
+        <div className="dlg-hdr">
+          <span className="dlg-hdr-title">Save class template changes</span>
+          <button className="dlg-close" onClick={onCancel} aria-label="Close">{I.close}</button>
+        </div>
+        <div className="dlg-body">
+          <p className="dlg-body-q">How should these changes be applied?</p>
+          <div className="dlg-radio-group">
+            {opts.map(o=>(
+              <button key={o.id} type="button" className={`dlg-radio ${scope===o.id?'on':''}`} onClick={()=>setScope(o.id)}>
+                <span className="dlg-radio-dot"><span className="dlg-radio-circle"/></span>
+                <span className="dlg-radio-text"><strong>{o.title}</strong> {o.desc}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="dlg-foot">
+          <button className="dlg-btn dlg-btn-arc" onClick={onCancel}>Cancel</button>
+          <button className="dlg-btn dlg-btn-fennec" onClick={()=>onSave(scope)}>Save</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Discard Changes modal (Figma 893:22370) ─────────────────────
+function DiscardChangesModal({ open, onCancel, onDiscard }) {
+  if (!open) return null;
+  return (
+    <div className="modal-overlay" onClick={e=>{if(e.target.className==='modal-overlay')onCancel();}}>
+      <div className="dlg dlg-discard" onClick={e=>e.stopPropagation()}>
+        <div className="dlg-hdr">
+          <span className="dlg-hdr-title">Discard changes?</span>
+          <button className="dlg-close" onClick={onCancel} aria-label="Close">{I.close}</button>
+        </div>
+        <div className="dlg-body">
+          <p className="dlg-body-q">You have unsaved changes, are you sure you want to discard them?</p>
+        </div>
+        <div className="dlg-foot">
+          <button className="dlg-btn dlg-btn-arc" onClick={onCancel}>Cancel</button>
+          <button className="dlg-btn dlg-btn-bengal" onClick={onDiscard}>Discard changes</button>
+        </div>
+      </div>
+    </div>
   );
 }
 
