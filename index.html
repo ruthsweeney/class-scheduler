@@ -1889,38 +1889,12 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
           </div>
         </div>
 
-        {/* ── Confirm modal for recurring schedule edits ── */}
-        {showConfirm && (
-          <div className="modal-overlay" onClick={e=>{if(e.target.className==='modal-overlay')setShowConfirm(false);}}>
-            <div className="modal-box" onClick={e=>e.stopPropagation()}>
-              <div className="modal-hdr">
-                <span className="modal-title">Save recurring schedule</span>
-                <button style={{width:28,height:28,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--kit-light)'}} onClick={()=>setShowConfirm(false)}>{I.close}</button>
-              </div>
-              <div className="modal-body">
-                <p className="modal-desc">You're editing a recurring schedule. Review the changes before saving.</p>
-                <div className="modal-sec-title">Changes summary</div>
-                <div className="changes-list">
-                  {changeSummary.map((c,i)=>(
-                    <div key={i} className="change-item">
-                      <span className="change-bullet">•</span>
-                      <span>{c}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="modal-sec-title">Apply to</div>
-                <div className="apply-opts">
-                  <Radio value="future" selected={applyTo==='future'} onChange={setApplyTo} label="This and all future classes"/>
-                  <Radio value="all"    selected={applyTo==='all'}    onChange={setApplyTo} label="All classes in this series"/>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn-cancel" onClick={()=>setShowConfirm(false)}>Cancel</button>
-                <button className="btn-confirm" onClick={handleConfirm}>Save changes</button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* ── Save schedule changes modal (Figma 1034:34048) ── */}
+        <SaveScheduleChangesModal
+          open={showConfirm}
+          onCancel={()=>setShowConfirm(false)}
+          onSave={scope=>{ setApplyTo(scope); setShowConfirm(false); onClose(); onSave(finalName()); }}
+        />
 
         {/* ── Delete class modal (edit modes) — Cancel vs Delete ── */}
         {showDelMenu && (
@@ -2436,24 +2410,22 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
   );
 }
 
-// ─── Save Class Template Changes modal (Figma 548:32085) ─────────
-function SaveTplChangesModal({ open, onCancel, onSave }) {
-  const [scope, setScope] = useState('updateAll');
+// ─── Apply-scope modal — shared dialog with 2 radio options ───────
+// Used by:
+//   - SaveTplChangesModal (Figma 1034:33905) — saving class template edits
+//   - SaveScheduleChangesModal (Figma 1034:34048) — saving recurring schedule edits
+function ApplyScopeModal({ open, title, question, opts, onCancel, onSave }) {
+  const [scope, setScope] = useState(opts[0]?.id || 'updateAll');
   if (!open) return null;
-  const opts = [
-    { id:'updateAll', title:'Update all existing schedules and classes.', desc:'Every schedule and class linked to this template will be updated with your changes.' },
-    { id:'protect',   title:'Protect your individual field changes.',     desc:(<><span>{"This update will roll out across all schedules and classes linked to this template. Any "}</span><strong>field</strong><span>{" you\u2019ve manually edited on a specific class or schedule won\u2019t be touched."}</span></>) },
-    { id:'skip',      title:'Skip any schedule or class with manual edits.', desc:"Any schedule or class where you\u2019ve edited even one field will be fully skipped. No template changes will apply." },
-  ];
   return (
     <div className="modal-overlay" onClick={e=>{if(e.target.className==='modal-overlay')onCancel();}}>
       <div className="dlg dlg-tpl-save" onClick={e=>e.stopPropagation()}>
         <div className="dlg-hdr">
-          <span className="dlg-hdr-title">Save class template changes</span>
+          <span className="dlg-hdr-title">{title}</span>
           <button className="dlg-close" onClick={onCancel} aria-label="Close">{I.close}</button>
         </div>
         <div className="dlg-body">
-          <p className="dlg-body-q">How should these changes be applied?</p>
+          <p className="dlg-body-q">{question}</p>
           <div className="dlg-radio-group">
             {opts.map(o=>(
               <button key={o.id} type="button" className={`dlg-radio ${scope===o.id?'on':''}`} onClick={()=>setScope(o.id)}>
@@ -2469,6 +2441,42 @@ function SaveTplChangesModal({ open, onCancel, onSave }) {
         </div>
       </div>
     </div>
+  );
+}
+
+// ─── Save Class Template Changes modal (Figma 1034:33905) ────────
+function SaveTplChangesModal({ open, onCancel, onSave }) {
+  const opts = [
+    { id:'updateAll',  title:'Update all upcoming classes and schedules.', desc:'Your changes will apply to every upcoming class and schedule linked to this template.' },
+    { id:'keepIndiv',  title:'Keep individual changes.',                   desc:"Details you\u2019ve already edited on specific classes or schedules will stay as they are." },
+  ];
+  return (
+    <ApplyScopeModal
+      open={open}
+      title="Save class template changes"
+      question="How should these changes be applied to future schedules and classes?"
+      opts={opts}
+      onCancel={onCancel}
+      onSave={onSave}
+    />
+  );
+}
+
+// ─── Save Schedule Changes modal (Figma 1034:34048) ──────────────
+function SaveScheduleChangesModal({ open, onCancel, onSave }) {
+  const opts = [
+    { id:'updateAll', title:'Update all future classes in this schedule.', desc:'Your changes will apply to every upcoming class in this schedule.' },
+    { id:'keepIndiv', title:'Keep individual changes.',                    desc:"Details you\u2019ve already edited on specific classes will stay as they are." },
+  ];
+  return (
+    <ApplyScopeModal
+      open={open}
+      title="Save schedule changes"
+      question="How should these changes be applied to future classes in this schedule?"
+      opts={opts}
+      onCancel={onCancel}
+      onSave={onSave}
+    />
   );
 }
 
