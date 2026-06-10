@@ -2146,15 +2146,6 @@ function ClassDefinitionDrawer({ open, onClose, onSave, defFc, onGoToCalendar, c
                 <div className="pricing-fixed">
                   <div className="card-title">Pricing / eligibility</div>
 
-                  {/* Class format (In person / Online) — Figma 274:25513 */}
-                  <div className="f-group">
-                    <label className="f-label">Class format</label>
-                    <div className="seg-pill-v2">
-                      <button className={classFormat==='In person'?'on':''} onClick={()=>{setClassFormat('In person');markDirty();}}>In person</button>
-                      <button className={classFormat==='Online'?'on':''}    onClick={()=>{setClassFormat('Online');markDirty();}}>Online</button>
-                    </div>
-                  </div>
-
                   {/* Glofox + Gympass bookings */}
                   <div className="f-group" style={{display:'flex',gap:24,alignItems:'flex-end',flexWrap:'wrap'}}>
                     <div>
