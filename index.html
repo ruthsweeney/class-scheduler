@@ -1524,10 +1524,22 @@ function ClassDrawer({ open, onClose, onSave, mode='create', event=null, templat
               )
             )}
 
-            {/* Class */}
+            {/* Class — locked in edit modes; template can't be changed on an existing schedule/class */}
             <div className="f-group">
               <label className="f-label">Class<span className="req">*</span></label>
-              <Sel value={cls} onChange={v=>{setCls(v);setIsDirty(true);}} opts={fc.showPlaceholderTpl ? CLASSES_LIST : CLASSES_LIST.filter(c=>c!==PLACEHOLDER_TPL)} placeholder="Select class"/>
+              {(() => {
+                const base = fc.showPlaceholderTpl ? CLASSES_LIST : CLASSES_LIST.filter(c=>c!==PLACEHOLDER_TPL);
+                const opts = isEdit && cls && !base.includes(cls) ? [cls, ...base] : base;
+                return (
+                  <Sel
+                    value={cls}
+                    onChange={v=>{setCls(v);setIsDirty(true);}}
+                    opts={opts}
+                    placeholder="Select class"
+                    disabled={isEdit}
+                  />
+                );
+              })()}
               {fc.showPlaceholderTpl && cls === PLACEHOLDER_TPL && (
                 <div className="f-hint f-hint-info">
                   {I.info}
